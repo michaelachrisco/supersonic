@@ -1,26 +1,34 @@
-# flow
+# supersonic
 A micro javascript framework built on React and Redux
 
-** Not released yet, still a major work in progress **
+** Not ready for production yet, still a major work in progress **
 
-## Development
+## Installation
 
-First fork the repo and then run:
+Easy:
 ```bash
-$ cd path/to/repo
-$ npm link
+$ npm install -g supersonic
 ```
 
-Then create a new flow app:
+## Usage
+
+### Create a new Supersonic app
+
 ```bash
-$ cd your/code/repo
-$ flow new hello_world
+$ ss new my-project-name
 ```
 
-After it does it's install thingy, cd into the directory and then:
+Supersonic will create a new project for you in a folder with the same name
+as your chosen project name.
+
+### Start the server
+
+Go into your newly created project folder and run:
 ```bash
-$ npm link flow
-$ flow server
+$ ss server
 ```
+
+Visit `localhost:3000` and there's your app! If all went well you should just
+see "Hello World"
 
 Hack away!!!
