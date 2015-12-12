@@ -1,4 +1,3 @@
-import { Supersonic } from 'supersonic'
 import Koa from 'koa'
 import Middleware from './middleware'
 import Router from './router'
