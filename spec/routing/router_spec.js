@@ -14,8 +14,8 @@ describe('Router', () => {
         path: '/',
         component: 'App',
         childRoutes: [
-          { path: 'foo', component: 'Foo' },
-          { path: 'bar', component: 'Bar' }
+          { path: 'foo', component: 'Foo', onEnter: function(){} },
+          { path: 'bar', component: 'Bar', onEnter: function(){} }
         ]
       }
 
@@ -27,7 +27,7 @@ describe('Router', () => {
         return router._routes
       })(router)
 
-      expect(routes).to.eql(expected)
+      expect(routes).to.equal(expected)
     })
 
     it('should properly handle nested components', () => {

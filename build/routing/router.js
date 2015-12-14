@@ -10,10 +10,23 @@ require('../ext/object');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var controllers = require('require-all')({
+  dirname: process.cwd() + '/build/app/controllers',
+  filter: /(.+_controller)\.js$/,
+  recursive: true
+});
+
+var queries = require('require-all')({
+  dirname: process.cwd() + '/build/app/queries',
+  filter: /(.+_query)\.js$/,
+  recursive: true
+});
+
 var Router = (function () {
   function Router() {
     _classCallCheck(this, Router);
 
+    console.log("FUCK IT");
     this._routes = { childRoutes: [] };
   }
 
@@ -34,7 +47,25 @@ var Router = (function () {
 
         this._routes.childRoutes.push(router._routes);
       } else {
-        this._routes.childRoutes.push({ path: path, component: component });
+        var onEnter = function onEnter(nextState, replaceState) {
+          var controllerName = controllers[path + '_controller'],
+              controller = undefined;
+
+          if (controllerName) {
+            controller = eval('new ' + controllerName + '.default(nextState, replaceState)');
+          } else {
+            controller = new controllers.base_controller.default(nextState, replaceState);
+          }
+
+          controller.call();
+        };
+
+        var _queries = undefined,
+            queryName = _queries[path + '_query'];
+
+        if (queryName) _queries = queryName.default;
+
+        this._routes.childRoutes.push({ path: path, component: component, onEnter: onEnter, queries: _queries });
       }
     }
   }]);

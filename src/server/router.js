@@ -1,12 +1,14 @@
 import { Supersonic } from 'supersonic'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import { match, RoutingContext } from 'react-router'
+import { RoutingContext } from 'isomorphic-relay-router'
+import { match } from 'react-router'
 
 let routes = require(`${Supersonic.root}/build/config/routes`).default
 
 export default (ctx, next) => {
   match({ routes, location: ctx.url }, (error, redirectLocation, renderProps) => {
+    console.log(routes)
     if (error) {
       ctx.response.status = 500
       ctx.body = error.message
