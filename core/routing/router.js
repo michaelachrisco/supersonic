@@ -1,20 +1,7 @@
 import '../ext/object'
 
-const controllers = require('require-all')({
-  dirname  : `${process.cwd()}/build/app/controllers`,
-  filter   : /(.+_controller)\.js$/,
-  recursive: true
-})
-
-const queries = require('require-all')({
-  dirname  : `${process.cwd()}/build/app/queries`,
-  filter   : /(.+_query)\.js$/,
-  recursive: true
-})
-
 export default class Router {
   constructor() {
-    console.log("FUCK IT")
     this._routes = { childRoutes: [] }
   }
 
@@ -23,7 +10,7 @@ export default class Router {
     this._routes.component = component
   }
 
-  route(path, component, callback) {
+  route(path, component, controller = {}, queries = {}, callback) {
     if (callback && callback.is_a('Function')) {
       let router = new Router()
 
@@ -33,22 +20,11 @@ export default class Router {
       this._routes.childRoutes.push(router._routes)
     } else {
       let onEnter = (nextState, replaceState) => {
-        let controllerName = controllers[`${path}_controller`],
-            controller
-
-        if (controllerName) {
-          controller = eval(`new ${controllerName}.default(nextState, replaceState)`)
-        } else {
-          controller = new controllers.base_controller.default(nextState, replaceState)
+        if (controller.is_a('Function')) {
+          let cont = new controller(nextState, replaceState)
+          cont.call()
         }
-
-        controller.call()
       }
-
-      let queries,
-          queryName = queries[`${path}_query`]
-
-      if (queryName) queries = queryName.default
 
       this._routes.childRoutes.push({ path, component, onEnter, queries })
     }

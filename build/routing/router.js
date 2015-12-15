@@ -10,23 +10,10 @@ require('../ext/object');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var controllers = require('require-all')({
-  dirname: process.cwd() + '/build/app/controllers',
-  filter: /(.+_controller)\.js$/,
-  recursive: true
-});
-
-var queries = require('require-all')({
-  dirname: process.cwd() + '/build/app/queries',
-  filter: /(.+_query)\.js$/,
-  recursive: true
-});
-
 var Router = (function () {
   function Router() {
     _classCallCheck(this, Router);
 
-    console.log("FUCK IT");
     this._routes = { childRoutes: [] };
   }
 
@@ -38,7 +25,11 @@ var Router = (function () {
     }
   }, {
     key: 'route',
-    value: function route(path, component, callback) {
+    value: function route(path, component) {
+      var controller = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+      var queries = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+      var callback = arguments[4];
+
       if (callback && callback.is_a('Function')) {
         var router = new Router();
 
@@ -48,24 +39,13 @@ var Router = (function () {
         this._routes.childRoutes.push(router._routes);
       } else {
         var onEnter = function onEnter(nextState, replaceState) {
-          var controllerName = controllers[path + '_controller'],
-              controller = undefined;
-
-          if (controllerName) {
-            controller = eval('new ' + controllerName + '.default(nextState, replaceState)');
-          } else {
-            controller = new controllers.base_controller.default(nextState, replaceState);
+          if (controller.is_a('Function')) {
+            var cont = new controller(nextState, replaceState);
+            cont.call();
           }
-
-          controller.call();
         };
 
-        var _queries = undefined,
-            queryName = _queries[path + '_query'];
-
-        if (queryName) _queries = queryName.default;
-
-        this._routes.childRoutes.push({ path: path, component: component, onEnter: onEnter, queries: _queries });
+        this._routes.childRoutes.push({ path: path, component: component, onEnter: onEnter, queries: queries });
       }
     }
   }]);
