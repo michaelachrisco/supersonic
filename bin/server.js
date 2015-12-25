@@ -24,7 +24,7 @@ exports.watch = function() {
 }
 
 exports.devServer = function() {
-  var devServer = spawn('webpack-dev-server', ['--config', './server/webpack.config.dev', '--hot', '--progress', '--inline']);
+  var devServer = spawn('webpack-dev-server', ['--config', './server/webpack.config.dev', '--hot', '--progress', '--inline', '--port', '8888']);
 
   devServer.stdout.on('data', function(data) {
     console.log(data.toString());

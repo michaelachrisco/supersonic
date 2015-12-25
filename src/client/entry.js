@@ -1,20 +1,24 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { injectPreparedData } from 'isomorphic-relay'
 import { Router } from 'isomorphic-relay-router'
-import { match } from 'react-router'
 import createBrowserHistory from 'history/lib/createBrowserHistory'
 import '../app/assets/stylesheets/app'
 import routes from '../config/routes'
+import Relay from 'react-relay'
 
-const { pathname, search, hash } = window.location
-const location = `${pathname}${search}${hash}`
+Relay.injectNetworkLayer(
+  new Relay.DefaultNetworkLayer('http://localhost:7000/queries')
+)
 
-match({ routes, location }, () => {
-  render(
-    <Router
-      routes={routes}
-      history={createBrowserHistory()}
-    />,
-    document.getElementById('app')
-  )
-})
+const data = JSON.parse(document.getElementById('preloadedData').textContent)
+
+injectPreparedData(data)
+
+render(
+  <Router
+    routes={routes}
+    history={createBrowserHistory()}
+  />,
+  document.getElementById('app')
+)
