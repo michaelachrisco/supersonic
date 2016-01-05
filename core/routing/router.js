@@ -5,16 +5,17 @@ export default class Router {
     this._routes = { childRoutes: [] }
   }
 
-  root(path, component) {
+  root(path, component, queries = null) {
     this._routes.path = path
     this._routes.component = component
+    if (component.queries) this._routes.queries = component.queries
   }
 
-  route(path, component, controller = {}, queries = {}, callback) {
+  route(path, component, controller, queries, callback) {
     if (callback && callback.is_a('Function')) {
       let router = new Router()
 
-      router.root(path, component)
+      router.root(path, component, queries)
       callback(router)
 
       this._routes.childRoutes.push(router._routes)
@@ -26,7 +27,8 @@ export default class Router {
         }
       }
 
-      this._routes.childRoutes.push({ path, component, onEnter, queries })
+      let params = { path, onEnter, component, queries }
+      this._routes.childRoutes.push(params)
     }
   }
 }

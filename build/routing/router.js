@@ -20,20 +20,19 @@ var Router = (function () {
   _createClass(Router, [{
     key: 'root',
     value: function root(path, component) {
+      var queries = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+
       this._routes.path = path;
       this._routes.component = component;
+      if (component.queries) this._routes.queries = component.queries;
     }
   }, {
     key: 'route',
-    value: function route(path, component) {
-      var controller = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-      var queries = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
-      var callback = arguments[4];
-
+    value: function route(path, component, controller, queries, callback) {
       if (callback && callback.is_a('Function')) {
         var router = new Router();
 
-        router.root(path, component);
+        router.root(path, component, queries);
         callback(router);
 
         this._routes.childRoutes.push(router._routes);
@@ -45,7 +44,8 @@ var Router = (function () {
           }
         };
 
-        this._routes.childRoutes.push({ path: path, component: component, onEnter: onEnter, queries: queries });
+        var params = { path: path, onEnter: onEnter, component: component, queries: queries };
+        this._routes.childRoutes.push(params);
       }
     }
   }]);
