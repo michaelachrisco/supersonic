@@ -16,10 +16,28 @@ var _redux = require('redux');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (key, actions) {
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+exports.default = function (keys, actions) {
   return function (component) {
     return (0, _reactRedux.connect)(function (state) {
-      return state[key].toJS();
+      if ((typeof keys === 'undefined' ? 'undefined' : _typeof(keys)) === 'object') {
+        var _ret = (function () {
+          var map = {};
+          keys.forEach(function (key) {
+            return map[key] = state[key];
+          });
+          return {
+            v: map
+          };
+        })();
+
+        if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+      } else {
+        return _defineProperty({}, keys, state[keys]);
+      }
     }, function (dispatch) {
       return (0, _redux.bindActionCreators)(_extends({}, actions), dispatch);
     })(component);

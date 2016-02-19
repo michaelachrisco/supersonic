@@ -2,10 +2,18 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-export default (key, actions) => {
+export default (keys, actions) => {
   return (component) => {
     return connect(state => {
-      return state[key].toJS()
+      if (typeof keys === 'object') {
+        let map = {}
+        keys.forEach(key => map[key] = state[key])
+        return map
+      } else {
+        return {
+          [keys]: state[keys]
+        }
+      }
     }, dispatch => {
       return bindActionCreators({ ...actions }, dispatch)
     })(component)

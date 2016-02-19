@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.reduxConnector = exports.RelayWrapper = exports.BaseReducer = exports.application = exports.router = exports.Supersonic = undefined;
+exports.reduxConnector = exports.relayContainer = exports.BaseReducer = exports.application = exports.router = exports.Supersonic = undefined;
 
 var _base_reducer = require('./reducers/base_reducer');
 
@@ -39,5 +39,5 @@ var application = Supersonic.Application;
 exports.router = router;
 exports.application = application;
 exports.BaseReducer = _base_reducer2.default;
-exports.RelayWrapper = _relay_decorator2.default;
+exports.relayContainer = _relay_decorator2.default;
 exports.reduxConnector = _redux_decorator2.default;
