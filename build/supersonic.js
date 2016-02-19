@@ -33,6 +33,7 @@ Supersonic.Application = {};
 Supersonic.Router = new _router2.default();
 Supersonic.root = process.cwd();
 
+
 var router = Supersonic.Router;
 var application = Supersonic.Application;
 
