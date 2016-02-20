@@ -10,4 +10,4 @@ app.use(async (ctx, next) => {
   await Router(ctx, next)
   next()
 })
-app.listen(3000)
+app.listen(process.env.PORT || 3000)
