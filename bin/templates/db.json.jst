@@ -1,0 +1,26 @@
+{
+  "development": {
+    "adapter": "postgres",
+    "host": "localhost",
+    "port": "5432",
+    "user": "",
+    "password": "",
+    "database": "{{= data.appName + '_development' }}"
+  },
+  "test": {
+    "adapter": "postgres",
+    "host": "localhost",
+    "port": "5432",
+    "user": "",
+    "password": "",
+    "database": "{{= data.appName + '_test' }}"
+  },
+  "production": {
+    "adapter": "postgres",
+    "host": "localhost",
+    "port": "5432",
+    "user": "",
+    "password": "",
+    "database": "{{= data.appName + '_production' }}"
+  }
+}

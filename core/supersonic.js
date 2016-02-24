@@ -1,7 +1,8 @@
-import BaseReducer from './reducers/base_reducer'
 import Router from './routing/router'
 import relayContainer from './helpers/relay_decorator'
 import reduxConnector from './helpers/redux_decorator'
+import BaseMigration from './model/base_migration'
+import BaseModel from './model/base_model'
 
 export class Supersonic {
   static Application = {}
@@ -15,7 +16,8 @@ const application = Supersonic.Application
 export {
   router,
   application,
-  BaseReducer,
   relayContainer,
-  reduxConnector
+  reduxConnector,
+  BaseMigration,
+  BaseModel
 }

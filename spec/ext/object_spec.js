@@ -21,3 +21,12 @@ describe('is_a', () => {
     expect(f.is_a('Number')).to.be.true
   })
 })
+
+describe('each', () => {
+  it('should iterate over the objects keys and values', () => {
+    var obj = { a: 1, b: 2 }
+    obj.each((key, value) => {
+      expect(value).to.eql(obj[key])
+    })
+  })
+})
