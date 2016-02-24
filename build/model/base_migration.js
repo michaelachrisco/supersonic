@@ -24,8 +24,9 @@ var BaseMigration = function () {
           sql = sql + ('\n  ' + key + ' ' + BaseMigration[value].pgType + ',');
         }
       });
-
-      return sql + '\n  id integer NOT NULL\n);';
+      sql = sql + '\n  created_at timestamp DEFAULT current_timestamp,';
+      sql = sql + '\n  updated_at timestamp DEFAULT current_timestamp,';
+      return sql + '\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid()\n);';
     }
   }]);
 
