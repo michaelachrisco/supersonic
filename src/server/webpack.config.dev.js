@@ -12,19 +12,22 @@ module.exports = {
     filename: 'app.js',
     publicPath: 'http://localhost:8080/js/'
   },
-  plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.NoErrorsPlugin()],
   resolve: {
-    extensions: ['', '.js', '.jsx', '.scss']
+    extensions: ['', '.js', '.jsx', '.scss'],
+    modulesDirectories: ["node_modules"]
   },
   module: {
-    loaders: [{
-      test: /\.jsx$|\.js$/,
-      loaders: ['react-hot', 'babel'],
-      exclude: /node_modules/
-    }, {
-      test: /\.scss$/,
-      loader: ExtractTextPlugin.extract('style', 'css!sass')
-    }]
+    loaders: [
+      {
+        test: /\.jsx$|\.js$/,
+        loaders: ['react-hot', 'babel'],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract('style', 'css!sass')
+      }
+    ]
   },
-  plugins: [new ExtractTextPlugin('styles.css')]
+  plugins: [new webpack.NoErrorsPlugin(), new ExtractTextPlugin('styles.css')]
 }

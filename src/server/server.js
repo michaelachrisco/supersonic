@@ -1,10 +1,31 @@
-import 'regenerator/runtime'
+// Babel polyfill for async await
+import 'babel-polyfill'
+
+// Relay for injecting a network layer
+import Relay from 'react-relay'
+
+// Koa and other stuff
 import Koa from 'koa'
-import Middleware from './middleware'
-import Router from './router'
 import cookie from 'react-cookie'
 
+// Grab the app middleware and default network layer
+import { Router, ApplicationMiddleware, NetworkLayer } from 'supersonic'
+
+// Custom middleware and the router
+import Middleware from './middleware'
+
 const app = new Koa()
+
+// Inject the network layer into Relay. This should be the
+// same network layer that you will be injecting into the
+// client entry point.
+Relay.injectNetworkLayer(new NetworkLayer())
+
+// App setup middleware
+//
+// This is where Supersonic sets up all of it's internals. You shouldn't
+// have to mess with this.
+ApplicationMiddleware(app)
 
 // Custom middleware
 //

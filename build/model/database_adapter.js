@@ -41,6 +41,11 @@ var DatabaseAdapter = function () {
       return _pgThen2.default.Client(connString);
     }
   }, {
+    key: 'pool',
+    value: function pool() {
+      return _pgThen2.default.Pool(this.connString).connect();
+    }
+  }, {
     key: 'runQuery',
     value: function runQuery(query) {
       var connString = arguments.length <= 1 || arguments[1] === undefined ? this.connString : arguments[1];
@@ -139,14 +144,6 @@ var DatabaseAdapter = function () {
           });
         });
       });
-    }
-  }, {
-    key: 'pool',
-    get: function get() {
-      return _pgThen2.default.Pool(this.connString);
-    },
-    set: function set(connString) {
-      this.pool = _pgThen2.default.Pool(connString);
     }
   }]);
 

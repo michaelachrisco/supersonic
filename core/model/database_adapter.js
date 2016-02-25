@@ -12,12 +12,8 @@ export default class DatabaseAdapter {
     return pg.Client(connString)
   }
 
-  get pool() {
-    return pg.Pool(this.connString)
-  }
-
-  set pool(connString) {
-    this.pool = pg.Pool(connString)
+  pool() {
+    return pg.Pool(this.connString).connect()
   }
 
   runQuery(query, connString = this.connString) {

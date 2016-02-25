@@ -24,7 +24,7 @@ exports.watch = function() {
 }
 
 exports.devServer = function() {
-  var devServer = spawn('webpack-dev-server', ['--config', './server/webpack.config.dev', '--hot', '--progress', '--inline', '--port', '8888']);
+  var devServer = spawn('webpack-dev-server', ['--config', './server/webpack.config.dev', '--hot', '--progress', '--inline', '--port', '8080']);
 
   devServer.stdout.on('data', function(data) {
     console.log(data.toString());
@@ -35,7 +35,7 @@ exports.server = function() {
   var server = spawn('nodemon', ['build/server/server']);
 
   server.stdout.on('data', function(data) {
-    console.log(data.toString());
+    console.info(data.toString());
   });
 }
 
