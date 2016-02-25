@@ -3,7 +3,6 @@ import ReactDOMServer from 'react-dom/server'
 import IsomorphicRouter from 'isomorphic-relay-router'
 import { match } from 'react-router'
 import IsomorphicRelay from 'isomorphic-relay'
-import NetworkLayer from './network_layer'
 
 const routes = require(`${process.cwd()}/build/config/routes`).default
 

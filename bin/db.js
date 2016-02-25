@@ -1,3 +1,5 @@
+#! /usr/bin/env babel-node
+
 var pg = require('pg');
 var fs = require('fs');
 var DatabaseAdapter = require('../core/model/database_adapter').default
