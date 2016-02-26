@@ -21,7 +21,7 @@ var BaseMigration = function () {
       var sql = 'CREATE TABLE ' + structure.tableName + ' (';
       structure.each(function (key, value) {
         if (key !== 'tableName') {
-          sql = sql + ('\n  ' + key + ' ' + BaseMigration[value].pgType + ',');
+          sql = sql + ('\n  ' + key + ' ' + BaseMigration.typeMap[value].pgType + ',');
         }
       });
       sql = sql + '\n  created_at timestamp DEFAULT current_timestamp,';
@@ -33,10 +33,12 @@ var BaseMigration = function () {
   return BaseMigration;
 }();
 
-BaseMigration.Str = _types.Str;
-BaseMigration.Text = _types.Text;
-BaseMigration.Bool = _types.Bool;
-BaseMigration.Float = _types.Float;
-BaseMigration.Integer = _types.Integer;
-BaseMigration.DateTime = _types.DateTime;
+BaseMigration.typeMap = {
+  string: _types.Str,
+  text: _types.Text,
+  boolean: _types.Bool,
+  float: _types.Float,
+  integer: _types.Integer,
+  datetime: _types.DateTime
+};
 exports.default = BaseMigration;

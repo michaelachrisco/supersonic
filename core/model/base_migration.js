@@ -8,18 +8,20 @@ import {
 } from './types'
 
 export default class BaseMigration {
-  static Str = Str;
-  static Text = Text;
-  static Bool = Bool;
-  static Float = Float;
-  static Integer = Integer;
-  static DateTime = DateTime;
+  static typeMap = {
+    string: Str,
+    text: Text,
+    boolean: Bool,
+    float: Float,
+    integer: Integer,
+    datetime: DateTime
+  }
 
   createTable(structure) {
     var sql = `CREATE TABLE ${structure.tableName} (`
     structure.each((key, value) => {
       if (key !== 'tableName') {
-        sql = sql + `\n  ${key} ${BaseMigration[value].pgType},`
+        sql = sql + `\n  ${key} ${BaseMigration.typeMap[value].pgType},`
       }
     })
     sql = sql + `\n  created_at timestamp DEFAULT current_timestamp,`
