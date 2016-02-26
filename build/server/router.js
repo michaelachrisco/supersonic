@@ -22,10 +22,6 @@ var _isomorphicRelay = require('isomorphic-relay');
 
 var _isomorphicRelay2 = _interopRequireDefault(_isomorphicRelay);
 
-var _network_layer = require('./network_layer');
-
-var _network_layer2 = _interopRequireDefault(_network_layer);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var routes = require(process.cwd() + '/build/config/routes').default;
