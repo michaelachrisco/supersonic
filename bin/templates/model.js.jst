@@ -1,5 +1,5 @@
 import { BaseModel } from 'supersonic'
 
-export default class {{= data.modelName.capitalize() }} extends BaseModel {
+export default class {{= data.modelName.singularize().capitalize() }} extends BaseModel {
 
 }

@@ -1,10 +1,6 @@
 import { BaseMigration } from 'supersonic'
 
 export default class {{= (data.migrationName + '_migration').classify() }} extends BaseMigration {
-  constructor() {
-    super()
-  }
-
   change() {
     return this.createTable(
       { {{ for (var key in data.structure) { }}

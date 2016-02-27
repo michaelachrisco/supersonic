@@ -9,16 +9,18 @@ describe('BaseMigration', () => {
       var m = new BaseMigration()
       var sql = m.createTable({
         tableName: 'users',
-        email: Str
+        email: "string"
       })
       var expected = heredoc`
       CREATE TABLE users (
-      email character varying(255),
-      id integer NOT NULL
+        email character varying(255),
+        created_at timestamp DEFAULT current_timestamp,
+        updated_at timestamp DEFAULT current_timestamp,
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid()
       );
       `
 
-      expect(sql).to.eql(expected)
+      expect(sql.replace(/^\s+/gm, '')).to.eql(expected)
     })
   })
 })

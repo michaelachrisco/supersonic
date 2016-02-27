@@ -22,39 +22,37 @@ if (!Object.is_a) {
 // })
 // -> a, 1
 //    b, 2
-if (!Object.each) {
-  Object.defineProperty(Object.prototype, 'each', {
-    value: function value(callback) {
-      if (this.constructor.name === 'Array') {
-        return this.forEach;
+Object.defineProperty(Object.prototype, 'each', {
+  value: function value(callback) {
+    if (this.constructor.name === 'Array') {
+      return this.forEach;
+    }
+
+    var object = this;
+
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = Object.keys(object)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var key = _step.value;
+
+        callback(key, object[key]);
       }
-
-      var object = this;
-
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
       try {
-        for (var _iterator = Object.keys(object)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var key = _step.value;
-
-          callback(key, object[key]);
+        if (!_iteratorNormalCompletion && _iterator.return) {
+          _iterator.return();
         }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
       } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
+        if (_didIteratorError) {
+          throw _iteratorError;
         }
       }
     }
-  });
-}
+  }
+});

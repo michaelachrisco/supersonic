@@ -20,18 +20,16 @@ if (!Object.is_a) {
 // })
 // -> a, 1
 //    b, 2
-if (!Object.each) {
-  Object.defineProperty(Object.prototype, 'each', {
-    value: function(callback) {
-      if (this.constructor.name === 'Array') {
-        return this.forEach
-      }
-
-      var object = this
-
-      for (let key of Object.keys(object)) {
-        callback(key, object[key])
-      }
+Object.defineProperty(Object.prototype, 'each', {
+  value: function(callback) {
+    if (this.constructor.name === 'Array') {
+      return this.forEach
     }
-  })
-}
+
+    var object = this
+
+    for (let key of Object.keys(object)) {
+      callback(key, object[key])
+    }
+  }
+})

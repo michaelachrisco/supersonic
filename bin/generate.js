@@ -1,5 +1,6 @@
 var fs = require('fs');
 var dot = require('dot');
+var chalk = require('chalk');
 
 Date.prototype.timestamp = function() {
   var yyyy = this.getFullYear().toString();
@@ -33,10 +34,14 @@ function generateModel(args) {
   var structure = { tableName: modelName.underscore().pluralize };
   var now = new Date();
 
-  fs.writeFileSync('./app/models/' + modelName.pluralize + '.js', dot.template(
+  // Create the model file
+  fs.writeFileSync('./app/models/' + modelName.singularize() + '.js', dot.template(
     fs.readFileSync(__dirname + '/templates/model.js.jst').toString()
   )({ modelName: modelName }));
 
+  console.info(chalk.green(`Created app/models/${modelName.pluralize}.js`))
+
+  // Create the migration
   columns.forEach(column => {
     var name = column.split(":")[0];
     var type = column.split(":")[1];
@@ -49,6 +54,8 @@ function generateModel(args) {
       fs.readFileSync(__dirname + '/templates/create_migration.js.jst').toString()
     )({ structure: structure, migrationName: 'create_' + modelName.underscore() })
   );
+
+  console.info(chalk.green(`Created db/migrate/${now.timestamp()}_create_${modelName.underscore()}.js`))
 }
 
 

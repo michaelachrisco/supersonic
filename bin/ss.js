@@ -7,6 +7,7 @@ var serverCommands = require('./server');
 var buildApp = require('./buildApp');
 var db = require('./db');
 var generate = require('./generate');
+var console = require('./console');
 var spawn = require('child_process').spawn;
 var userArgs = process.argv.slice(2);
 var command = userArgs[0];
@@ -26,6 +27,9 @@ switch (command) {
     break;
   case 'new':
     buildApp.build(userArgs[1]);
+    break;
+  case 'console':
+    console.run()
     break;
   case 'generate':
     generate.call(userArgs);
@@ -50,5 +54,8 @@ switch (command) {
     break;
   case 'g':
     generate.call(userArgs);
+    break;
+  case 'c':
+    console.run()
     break;
 }
