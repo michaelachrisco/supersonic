@@ -30,19 +30,24 @@ var BaseModel = function () {
       return pg.insert().into(tableName).setFields(params).returning('*').toParam();
     }
   }, {
+    key: 'relation',
+    value: function relation(name) {
+      return new _relation2.default(eval(name));
+    }
+  }, {
     key: 'first',
     value: function first() {
-      return new _relation2.default(eval(this.name)).first();
+      return BaseModel.relation(this.name).first();
     }
   }, {
     key: 'find',
     value: function find(id) {
-      return new _relation2.default(eval(this.name)).find(id);
+      return BaseModel.relation(this.name).find(id);
     }
   }, {
     key: 'where',
     value: function where(params) {
-      return new _relation2.default(eval(this.name)).where(params);
+      return BaseModel.relation(this.name).where(params);
     }
   }]);
 

@@ -16,16 +16,20 @@ export default class BaseModel {
       toParam()
   };
 
+  static relation(name) {
+    return new Relation(eval(name))
+  }
+
   static first() {
-    return new Relation(eval(this.name)).first()
+    return BaseModel.relation(this.name).first()
   }
 
   static find(id) {
-    return new Relation(eval(this.name)).find(id)
+    return BaseModel.relation(this.name).find(id)
   };
 
   static where(params) {
-    return new Relation(eval(this.name)).where(params)
+    return BaseModel.relation(this.name).where(params)
   };
 
   constructor(attributes) {
