@@ -8,7 +8,7 @@
   },
   "scripts": {
     "prePublish": "npm build",
-    "test": "mocha --opts ./spec/mocha.opts",
+    "test": "env NODE_ENV=test mocha --opts ./spec/mocha.opts",
     "clean": "rm -rf build",
     "build": "babel core -d build",
     "watch": "babel core -d build -w"

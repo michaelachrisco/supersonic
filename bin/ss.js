@@ -40,6 +40,9 @@ switch (command) {
   case 'db:setup':
     db.setup()
     break;
+  case 'db:reset':
+    db.reset()
+    break;
   case 'schema:dump':
     dumpSchema();
     break;

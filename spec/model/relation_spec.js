@@ -32,16 +32,16 @@ describe('Relation', () => {
     })
   })
 
-  describe('#find', () => {
-    it('should create an escaped sql string', () => {
-      var relation = new Relation(BaseModel).find(1)
-      var expected = {
-        text: 'SELECT * FROM base_models WHERE (id = 1) LIMIT 1',
-        values: []
-      }
-      expect(relation.toParam()).to.eql(expected)
-    })
-  })
+  //describe('#find', () => {
+  //  it('should create an escaped sql string', () => {
+  //    var relation = new Relation(BaseModel).find(1)
+  //    var expected = {
+  //      text: 'SELECT * FROM base_models WHERE (id = 1) LIMIT 1',
+  //      values: []
+  //    }
+  //    expect(relation.toParam()).to.eql(expected)
+  //  })
+  //})
 
   describe('#where', () => {
     it('should create an escaped sql string', () => {

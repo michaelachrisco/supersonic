@@ -37,8 +37,10 @@ var Relation = function () {
     this.tableName = klass.name.underscore().pluralize;
     this.pg = _squel2.default.useFlavour('postgres');
     this.relation = relation || _squel2.default.useFlavour('postgres');
-    var dbConfig = JSON.parse(_fs2.default.readFileSync(process.cwd() + '/config/db.json').toString())[process.env.NODE_ENV || 'development'];
-    this.adapter = new _database_adapter2.default(dbConfig);
+    if (!(process.env.NODE_ENV === 'test')) {
+      var dbConfig = JSON.parse(_fs2.default.readFileSync(process.cwd() + '/config/db.json').toString())[process.env.NODE_ENV || 'development'];
+      this.adapter = new _database_adapter2.default(dbConfig);
+    }
   }
 
   _createClass(Relation, [{
