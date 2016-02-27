@@ -23,6 +23,7 @@ exports.run = function() {
   replServer.context.BaseModel = BaseModel
   for (let model in models) {
     replServer.context[model] = models[model]
+    replServer.context[model].setColumnNames()
   }
   replServer.context.db = db.client()
   replServer.context.runQuery = db.runQuery
