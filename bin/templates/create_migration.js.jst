@@ -1,0 +1,11 @@
+import { BaseMigration } from 'supersonic'
+
+export default class {{= (data.migrationName + '_migration').classify() }} extends BaseMigration {
+  change() {
+    return this.createTable(
+      { {{ for (var key in data.structure) { }}
+        {{= '' + key.toString() + ': "' + data.structure[key] + '",' }} {{ } }}
+      }
+    )
+  }
+}

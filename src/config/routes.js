@@ -1,10 +1,12 @@
-import { router } from 'supersonic'
+// Vendor Libraries
+import React from 'react'
+import { Route } from 'react-router'
+
+// Container
 import Container from '../app/views/container'
 
-const routes = ((router) => {
-  router.root('/', Container)
+export default (
+  <Route path='/' component={Container}>
 
-  return router._routes
-})(router)
-
-export default routes
+  </Route>
+)

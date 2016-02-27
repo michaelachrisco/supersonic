@@ -1,11 +1,39 @@
+// React and Relay
 import React from 'react'
+import Relay from 'react-relay'
 import { render } from 'react-dom'
-import { Router } from 'react-router'
+import IsomorphicRelay from 'isomorphic-relay'
+import IsomorphicRouter from 'isomorphic-relay-router'
+
+// Default Network Layer from Supersonic
+import { NetworkLayer } from 'supersonic'
+
+// Browser History
 import createBrowserHistory from 'history/lib/createBrowserHistory'
-import '../app/assets/stylesheets/app'
+
+// Routes
 import routes from '../config/routes'
 
+// Stylesheets
+import '../app/assets/stylesheets/app'
+
+// Inject the default network layer
+// You can create your own from scratch if you need custom
+// behavior, or sub class the NetworkLayer class and
+// override functionality.
+Relay.injectNetworkLayer(new NetworkLayer())
+
+// Parse the preloaded data
+const data = JSON.parse(document.getElementById('preloadedData').textContent)
+
+// Inject the preloaded data for rendering
+IsomorphicRelay.injectPreparedData(data)
+
+// Render the app!
 render(
-  <Router routes={routes} history={createBrowserHistory()} />,
+  <IsomorphicRouter.Router
+    routes={routes}
+    history={createBrowserHistory()}
+  />,
   document.getElementById('app')
 )

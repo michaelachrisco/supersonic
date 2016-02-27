@@ -19,9 +19,15 @@ exports.build = function(appName) {
     console.log('Copying Supersonic directory structure and files...');
     console.log('');
 
+    // Create the package.json file
     fs.writeFileSync('./' + appName + '/package.json', dot.template(
-      fs.readFileSync(__dirname + '/package.json.jst').toString()
+      fs.readFileSync(__dirname + '/templates/package.json.jst').toString()
     )({ name: appName }));
+
+    // Create the db.json file
+    fs.writeFileSync('./' + appName + '/config/db.json', dot.template(
+      fs.readFileSync(__dirname + '/templates/db.json.jst').toString()
+    )({ appName: appName }));
 
     var child = spawn('npm', ['cache', 'clean'], {cwd: process.cwd() + '/' + appName, stdio: [process.stdin, process.stdout, process.stderr]});
 
