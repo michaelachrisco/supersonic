@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _templateObject = _taggedTemplateLiteral(['\n      CREATE TABLE IF NOT EXISTS schema_migrations (\n        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n        migration_name character varying(255),\n        created_at timestamp DEFAULT current_timestamp\n      )\n    '], ['\n      CREATE TABLE IF NOT EXISTS schema_migrations (\n        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n        migration_name character varying(255),\n        created_at timestamp DEFAULT current_timestamp\n      )\n    ']),
-    _templateObject2 = _taggedTemplateLiteral(['\n        ', '\n        ', '\n        ', '\n        ', '\n\n      '], ['\n        ', '\n        ', '\n        ', '\n        ', '\n\n      ']);
+    _templateObject2 = _taggedTemplateLiteral(['\n        ', '\n        ', '\n        ', '\n        ', '\n        ', '\n\n      '], ['\n        ', '\n        ', '\n        ', '\n        ', '\n        ', '\n\n      ']);
 
 var _pgThen = require('pg-then');
 
@@ -18,6 +18,10 @@ var _fs = require('fs');
 var _fs2 = _interopRequireDefault(_fs);
 
 var _strings = require('../utils/strings');
+
+var _chalk = require('chalk');
+
+var _chalk2 = _interopRequireDefault(_chalk);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -65,13 +69,35 @@ var DatabaseAdapter = function () {
     value: function createDatabase(name) {
       var _this = this;
 
+      var skipExtensions = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
       var connParams = this.connParams;
       var connString = 'postgres://' + connParams.user + ':' + connParams.password + '@' + connParams.host + ':' + connParams.port;
       var query = 'CREATE DATABASE "' + name.underscore() + '";';
 
       return this.runQuery(query, connString).then(function (rows) {
         console.info('Database ' + name + ' created');
-        _this.enableUUIDExtension();
+        if (!skipExtensions) {
+          _this.enableUUIDExtension();
+        }
+      });
+    }
+  }, {
+    key: 'resetDatabase',
+    value: function resetDatabase(name) {
+      var _this2 = this;
+
+      var connParams = this.connParams;
+      var connString = 'postgres://' + connParams.user + ':' + connParams.password + '@' + connParams.host + ':' + connParams.port;
+      var query = 'DROP DATABASE "' + name.underscore() + '";';
+
+      return this.runQuery(query, connString).then(function (rows) {
+        console.info('Database ' + name + ' dropped');
+        _this2.createDatabase(name, true).then(function (res) {
+          _this2.enableUUIDExtension().then(function (res) {
+            _this2.performMigrations();
+          });
+        });
       });
     }
   }, {
@@ -99,7 +125,7 @@ var DatabaseAdapter = function () {
   }, {
     key: 'performMigration',
     value: function performMigration(migration) {
-      var _this2 = this;
+      var _this3 = this;
 
       var mig = require(process.cwd() + '/db/migrate/' + migration).default;
       var queryString = new mig().change();
@@ -110,8 +136,8 @@ var DatabaseAdapter = function () {
         }).length;
         var lineString = Array(lineLength + 3).join("=");
 
-        console.info((0, _strings.heredoc)(_templateObject2, migration, lineString, queryString, lineString));
-        _this2.createMigrationRecord(migration.replace(/\.js/, ''));
+        console.info((0, _strings.heredoc)(_templateObject2, _chalk2.default.green('Performing migration for: ' + _this3.connParams.database), _chalk2.default.blue(migration), lineString, _chalk2.default.yellow(queryString), lineString));
+        _this3.createMigrationRecord(migration.replace(/\.js/, ''));
       });
     }
   }, {
@@ -124,12 +150,12 @@ var DatabaseAdapter = function () {
   }, {
     key: 'performMigrations',
     value: function performMigrations() {
-      var _this3 = this;
+      var _this4 = this;
 
       var files = _fs2.default.readdirSync(process.cwd() + '/db/migrate/');
 
       this.createMigrationSchema().then(function (res) {
-        _this3.getPerformedMigrations().then(function (rows) {
+        _this4.getPerformedMigrations().then(function (rows) {
           var completedMigrations = rows.map(function (row) {
             return row.migration_name;
           });
@@ -140,7 +166,7 @@ var DatabaseAdapter = function () {
           });
 
           migrationsToPerform.forEach(function (migration) {
-            return _this3.performMigration(migration);
+            return _this4.performMigration(migration);
           });
         });
       });

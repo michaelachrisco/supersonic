@@ -1,6 +1,7 @@
 import pg from 'pg-then'
 import fs from 'fs'
 import { heredoc } from '../utils/strings'
+import chalk from 'chalk'
 
 export default class DatabaseAdapter {
   constructor(connParams) {
@@ -30,7 +31,7 @@ export default class DatabaseAdapter {
     })
   }
 
-  createDatabase(name) {
+  createDatabase(name, skipExtensions = false) {
     var connParams = this.connParams
     var connString = `postgres://${connParams.user}:${connParams.password}@${connParams.host}:${connParams.port}`
     var query = `CREATE DATABASE "${name.underscore()}";`
@@ -38,7 +39,25 @@ export default class DatabaseAdapter {
     return this.runQuery(query, connString).
     then(rows => {
       console.info(`Database ${name} created`)
-      this.enableUUIDExtension()
+      if (!skipExtensions) {
+        this.enableUUIDExtension()
+      }
+    })
+  }
+
+  resetDatabase(name) {
+    var connParams = this.connParams
+    var connString = `postgres://${connParams.user}:${connParams.password}@${connParams.host}:${connParams.port}`
+    var query = `DROP DATABASE "${name.underscore()}";`
+
+    return this.runQuery(query, connString).
+    then(rows => {
+      console.info(`Database ${name} dropped`)
+      this.createDatabase(name, true).then(res => {
+        this.enableUUIDExtension().then(res => {
+          this.performMigrations()
+        })
+      })
     })
   }
 
@@ -78,9 +97,10 @@ export default class DatabaseAdapter {
       var lineString = Array(lineLength + 3).join("=")
 
       console.info(heredoc`
-        ${migration}
+        ${chalk.green('Performing migration for: ' + this.connParams.database)}
+        ${chalk.blue(migration)}
         ${lineString}
-        ${queryString}
+        ${chalk.yellow(queryString)}
         ${lineString}
 
       `)
