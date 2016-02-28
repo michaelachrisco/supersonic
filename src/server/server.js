@@ -1,6 +1,9 @@
 // Babel polyfill for async await
 import 'babel-polyfill'
 
+// Inflectors
+import 'legit-inflectors'
+
 // Relay for injecting a network layer
 import Relay from 'react-relay'
 

@@ -1,4 +1,3 @@
-import 'legit-inflectors'
 import fs from 'fs'
 import squel from 'squel'
 import DatabaseAdapter from './database_adapter'

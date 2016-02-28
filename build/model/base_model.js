@@ -6,11 +6,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-require('legit-inflectors');
-
 var _squel = require('squel');
 
 var _squel2 = _interopRequireDefault(_squel);
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
 
 var _relation = require('./relation');
 
@@ -25,10 +27,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var BaseModel = function () {
-  function BaseModel() {
-    _classCallCheck(this, BaseModel);
-  }
-
   _createClass(BaseModel, null, [{
     key: 'create',
     value: function create(params) {
@@ -62,7 +60,7 @@ var BaseModel = function () {
   }, {
     key: 'transaction',
     value: function transaction(query) {
-      var dbConfig = JSON.parse(fs.readFileSync(process.cwd() + '/config/db.json').toString())[process.env.NODE_ENV || 'development'];
+      var dbConfig = JSON.parse(_fs2.default.readFileSync(process.cwd() + '/config/db.json').toString())[process.env.NODE_ENV || 'development'];
       var adapter = new _database_adapter2.default(dbConfig);
       return adapter.runQuery(query);
     }
@@ -77,14 +75,15 @@ var BaseModel = function () {
         });
       });
     }
-  }, {
-    key: 'constructor',
-    value: function constructor(attributes) {
-      for (var key in attributes) {
-        this[key] = attributes[key];
-      }
-    }
   }]);
+
+  function BaseModel(attributes) {
+    _classCallCheck(this, BaseModel);
+
+    for (var key in attributes) {
+      this[key] = attributes[key];
+    }
+  }
 
   return BaseModel;
 }();

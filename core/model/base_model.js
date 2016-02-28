@@ -1,5 +1,5 @@
-import 'legit-inflectors'
 import squel from 'squel'
+import fs from 'fs'
 
 import Relation from './relation'
 import DatabaseAdapter from './database_adapter'
@@ -49,7 +49,6 @@ export default class BaseModel {
     `).then(rows => eval(this.name).columnNames = rows.map(row => row.column_name))
   }
 
-  static
   constructor(attributes) {
     for (let key in attributes) {
       this[key] = attributes[key]

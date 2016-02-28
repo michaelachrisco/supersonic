@@ -1,4 +1,5 @@
 --full-trace
 --require babel-polyfill
+--require legit-inflectors
 --compilers js:babel-core/register
 --recursive spec/**/*.js
