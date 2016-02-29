@@ -48,6 +48,7 @@ var BaseMigration = function () {
 
       sql = sql + '\n  created_at timestamp DEFAULT current_timestamp,';
       sql = sql + '\n  updated_at timestamp DEFAULT current_timestamp,';
+      console.log(sql);
       return sql + '\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid()\n);';
     }
   }]);
@@ -61,6 +62,7 @@ BaseMigration.typeMap = {
   boolean: _types.Bool,
   float: _types.Float,
   integer: _types.Integer,
-  datetime: _types.DateTime
+  datetime: _types.DateTime,
+  id: _types.Id
 };
 exports.default = BaseMigration;

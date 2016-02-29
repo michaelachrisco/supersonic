@@ -4,6 +4,7 @@ import BaseModel from './model/base_model'
 import ApplicationMiddleware from './server/middleware/application'
 import NetworkLayer from './server/network_layer'
 import Router from './server/router'
+import SchemaBuilder from './schema/schema_builder'
 
 export class Supersonic {
   static Application = {}
@@ -20,5 +21,6 @@ export {
   BaseModel,
   ApplicationMiddleware,
   NetworkLayer,
-  Router
+  Router,
+  SchemaBuilder
 }

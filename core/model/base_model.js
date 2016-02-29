@@ -1,5 +1,6 @@
 import squel from 'squel'
 import fs from 'fs'
+import * as g from 'graphql'
 
 import Relation from './relation'
 import DatabaseAdapter from './database_adapter'
@@ -24,15 +25,15 @@ export default class BaseModel {
   }
 
   static first() {
-    return BaseModel.relation(this.name).first()
+    return BaseModel.relation(this).first()
   }
 
   static find(id) {
-    return BaseModel.relation(this.name).find(id)
+    return BaseModel.relation(this).find(id)
   };
 
   static where(params) {
-    return BaseModel.relation(this.name).where(params)
+    return BaseModel.relation(this).where(params)
   };
 
   static transaction(query) {
@@ -41,12 +42,42 @@ export default class BaseModel {
     return adapter.runQuery(query)
   }
 
-  static setColumnNames() {
-    BaseModel.transaction(`
-      SELECT column_name
-      FROM information_schema.columns
-      WHERE table_schema='public' AND table_name='${this.name.underscore().pluralize}'
-    `).then(rows => eval(this.name).columnNames = rows.map(row => row.column_name))
+  static getGraphQLType(type) {
+    switch(true) {
+      case /datetime/.test(type):
+        return 'g.GraphQLString'
+      case /string/.test(type):
+        return 'g.GraphQLString'
+      case /integer/.test(type):
+        return 'g.GraphQLInt'
+      case /float/.test(type):
+        return 'g.GraphQLFloat'
+      case /boolean/.test(type):
+        return 'g.GraphQLBoolean'
+      case /id/.test(type):
+        return 'g.GraphQLID'
+      default:
+        return 'g.GraphQLString'
+    }
+  }
+
+  static buildGraphQLType(columns, name) {
+    var structure = {
+      name: name.singularize().capitalize(),
+      fields: {
+        id: { type: 'g.GraphQLID' },
+        created_at: { type: 'g.GraphQLString' },
+        updated_at: { type: 'g.GraphQLString' }
+      }
+    }
+
+    columns.forEach(column => {
+      var name = column.split(":")[0]
+      var type = column.split(":")[1]
+      structure.fields[name] = { type: BaseModel.getGraphQLType(type) }
+    })
+
+    return structure
   }
 
   constructor(attributes) {

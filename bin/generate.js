@@ -1,6 +1,7 @@
 var fs = require('fs');
 var dot = require('dot');
 var chalk = require('chalk');
+var BaseModel = require('../build/model/base_model').default;
 
 Date.prototype.timestamp = function() {
   var yyyy = this.getFullYear().toString();
@@ -33,13 +34,17 @@ function generateModel(args) {
   var columns = args.slice(3);
   var structure = { tableName: modelName.underscore().pluralize };
   var now = new Date();
+  var graphQLType = BaseModel.buildGraphQLType(columns, modelName)
 
   // Create the model file
   fs.writeFileSync('./app/models/' + modelName.singularize() + '.js', dot.template(
     fs.readFileSync(__dirname + '/templates/model.js.jst').toString()
-  )({ modelName: modelName }));
+  )({ modelName, graphQLType }));
 
   console.info(chalk.green(`Created app/models/${modelName.pluralize}.js`))
+
+  // Add the new model to the models export
+  fs.appendFileSync('./app/models/index.js', `export ${modelName.singularize().capitalize()} from './${modelName.singularize()}'`)
 
   // Create the migration
   columns.forEach(column => {

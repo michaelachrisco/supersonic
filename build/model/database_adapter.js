@@ -162,7 +162,9 @@ var DatabaseAdapter = function () {
           var migrationsToPerform = [];
 
           files.forEach(function (file) {
-            if (!completedMigrations.include(file.replace(/\.js/, ''))) migrationsToPerform.push(file);
+            if (file.match(/\.js$/)) {
+              if (!completedMigrations.include(file.replace(/\.js/, ''))) migrationsToPerform.push(file);
+            }
           });
 
           migrationsToPerform.forEach(function (migration) {

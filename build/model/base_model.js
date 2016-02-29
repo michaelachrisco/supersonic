@@ -14,6 +14,10 @@ var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
 
+var _graphql = require('graphql');
+
+var g = _interopRequireWildcard(_graphql);
+
 var _relation = require('./relation');
 
 var _relation2 = _interopRequireDefault(_relation);
@@ -21,6 +25,8 @@ var _relation2 = _interopRequireDefault(_relation);
 var _database_adapter = require('./database_adapter');
 
 var _database_adapter2 = _interopRequireDefault(_database_adapter);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45,17 +51,17 @@ var BaseModel = function () {
   }, {
     key: 'first',
     value: function first() {
-      return BaseModel.relation(this.name).first();
+      return BaseModel.relation(this).first();
     }
   }, {
     key: 'find',
     value: function find(id) {
-      return BaseModel.relation(this.name).find(id);
+      return BaseModel.relation(this).find(id);
     }
   }, {
     key: 'where',
     value: function where(params) {
-      return BaseModel.relation(this.name).where(params);
+      return BaseModel.relation(this).where(params);
     }
   }, {
     key: 'transaction',
@@ -65,15 +71,44 @@ var BaseModel = function () {
       return adapter.runQuery(query);
     }
   }, {
-    key: 'setColumnNames',
-    value: function setColumnNames() {
-      var _this = this;
+    key: 'getGraphQLType',
+    value: function getGraphQLType(type) {
+      switch (true) {
+        case /datetime/.test(type):
+          return 'g.GraphQLString';
+        case /string/.test(type):
+          return 'g.GraphQLString';
+        case /integer/.test(type):
+          return 'g.GraphQLInt';
+        case /float/.test(type):
+          return 'g.GraphQLFloat';
+        case /boolean/.test(type):
+          return 'g.GraphQLBoolean';
+        case /id/.test(type):
+          return 'g.GraphQLID';
+        default:
+          return 'g.GraphQLString';
+      }
+    }
+  }, {
+    key: 'buildGraphQLType',
+    value: function buildGraphQLType(columns, name) {
+      var structure = {
+        name: name.singularize().capitalize(),
+        fields: {
+          id: { type: 'g.GraphQLID' },
+          created_at: { type: 'g.GraphQLString' },
+          updated_at: { type: 'g.GraphQLString' }
+        }
+      };
 
-      BaseModel.transaction('\n      SELECT column_name\n      FROM information_schema.columns\n      WHERE table_schema=\'public\' AND table_name=\'' + this.name.underscore().pluralize + '\'\n    ').then(function (rows) {
-        return eval(_this.name).columnNames = rows.map(function (row) {
-          return row.column_name;
-        });
+      columns.forEach(function (column) {
+        var name = column.split(":")[0];
+        var type = column.split(":")[1];
+        structure.fields[name] = { type: BaseModel.getGraphQLType(type) };
       });
+
+      return structure;
     }
   }]);
 

@@ -79,7 +79,9 @@ var Relation = function () {
   }, {
     key: 'find',
     value: function find(id) {
-      return new Relation(this.klass, this.baseSelect().where('id = \'' + id + '\'').limit(1)).execute();
+      return new Relation(this.klass, this.baseSelect().where('id = \'' + id + '\'').limit(1)).execute().then(function (rows) {
+        return rows[0];
+      });
     }
   }, {
     key: 'where',

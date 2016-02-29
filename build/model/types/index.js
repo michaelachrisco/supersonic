@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DateTime = exports.Float = exports.Integer = exports.Bool = exports.Text = exports.Str = undefined;
+exports.Id = exports.DateTime = exports.Float = exports.Integer = exports.Bool = exports.Text = exports.Str = undefined;
 
 var _string = require('./string');
 
@@ -29,6 +29,10 @@ var _datetime = require('./datetime');
 
 var _datetime2 = _interopRequireDefault(_datetime);
 
+var _id = require('./id');
+
+var _id2 = _interopRequireDefault(_id);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.Str = _string2.default;
@@ -37,3 +41,4 @@ exports.Bool = _boolean2.default;
 exports.Integer = _integer2.default;
 exports.Float = _float2.default;
 exports.DateTime = _datetime2.default;
+exports.Id = _id2.default;

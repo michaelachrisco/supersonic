@@ -1,7 +1,5 @@
 // Babel polyfill for async await
 import 'babel-polyfill'
-
-// Inflectors
 import 'legit-inflectors'
 
 // Relay for injecting a network layer
@@ -10,13 +8,24 @@ import Relay from 'react-relay'
 // Koa and other stuff
 import Koa from 'koa'
 import cookie from 'react-cookie'
+import graphqlHTTP from 'koa-graphql'
+import mount from 'koa-mount'
+import convert from 'koa-convert'
+import router from 'koa-router'
+import bodyParser from 'koa-body-parser'
 
 // Grab the app middleware and default network layer
-import { Router, ApplicationMiddleware, NetworkLayer } from 'supersonic'
+import {
+  Router,
+  SchemaBuilder,
+  ApplicationMiddleware,
+  NetworkLayer
+} from 'supersonic'
 
 // Custom middleware and the router
 import Middleware from './middleware'
 
+// Create the app
 const app = new Koa()
 
 // Inject the network layer into Relay. This should be the
@@ -29,6 +38,12 @@ Relay.injectNetworkLayer(new NetworkLayer())
 // This is where Supersonic sets up all of it's internals. You shouldn't
 // have to mess with this.
 ApplicationMiddleware(app)
+
+// Mount the graphql endpoint
+//
+app.use(convert(mount('/graphql', graphqlHTTP((req, ctx) => {
+  return { schema: schema, graphiql: true }
+}))))
 
 // Custom middleware
 //
