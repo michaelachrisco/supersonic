@@ -24,6 +24,7 @@ import {
 
 // Custom middleware and the router
 import Middleware from './middleware'
+import { Schema } from '~/config/schema'
 
 // Create the app
 const app = new Koa()
@@ -42,7 +43,7 @@ ApplicationMiddleware(app)
 // Mount the graphql endpoint
 //
 app.use(convert(mount('/graphql', graphqlHTTP((req, ctx) => {
-  return { schema: schema, graphiql: true }
+  return { schema: Schema, graphiql: (process.env.NODE_ENV === 'development') }
 }))))
 
 // Custom middleware

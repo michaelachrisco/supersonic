@@ -1,3 +1,4 @@
+import { Map } from 'immutable'
 import {
   Str,
   Text,
@@ -9,7 +10,7 @@ import {
 } from './types'
 
 export default class BaseMigration {
-  static typeMap = {
+  static typeMap = Map({
     string: Str,
     text: Text,
     boolean: Bool,
@@ -17,13 +18,14 @@ export default class BaseMigration {
     integer: Integer,
     datetime: DateTime,
     id: Id
-  };
+  });
 
   createTable(structure) {
     var sql = `CREATE TABLE ${structure.tableName} (`
     for (let key of Object.keys(structure)) {
       if (key !== 'tableName') {
-        sql = sql + `\n  ${key} ${BaseMigration.typeMap[structure[key]].pgType},`
+        var type = BaseMigration.typeMap.get(structure[key], Str).pgType
+        sql = sql + `\n  ${key} ${type},`
       }
     }
     sql = sql + `\n  created_at timestamp DEFAULT current_timestamp,`

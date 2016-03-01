@@ -1,8 +1,9 @@
 import * as g from 'graphql'
-import queries from '~/app/schema/queries'
+import * as schema from '~/app/schema'
 
-const schema = new g.GraphQLSchema({
-  query: queries
+const Schema = new g.GraphQLSchema({
+  query: schema.queryType,
+  mutation: schema.mutationType
 })
 
-export default schema
+export { Schema }

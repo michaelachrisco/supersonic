@@ -35,17 +35,67 @@ function generateModel(args) {
   var structure = { tableName: modelName.underscore().pluralize };
   var now = new Date();
   var graphQLType = BaseModel.buildGraphQLType(columns, modelName)
+  var fileName = modelName.singularize().underscore()
+  var className = modelName.singularize().capitalize()
 
   // Create the model file
-  fs.writeFileSync('./app/models/' + modelName.singularize() + '.js', dot.template(
+  fs.writeFileSync(`./app/models/${fileName}.js`, dot.template(
     fs.readFileSync(__dirname + '/templates/model.js.jst').toString()
   )({ modelName, graphQLType }));
 
-  console.info(chalk.green(`Created app/models/${modelName.pluralize}.js`))
+  console.info(chalk.green(`Created app/models/${fileName}.js`))
 
   // Add the new model to the models export
-  fs.appendFileSync('./app/models/index.js', `export ${modelName.singularize().capitalize()} from './${modelName.singularize()}'`)
+  fs.appendFileSync('./app/models/index.js', `\nexport ${className} from './${modelName.singularize()}'`)
 
+  // Create the mutations
+  //
+  // Create the mutations directory
+  //
+  var dirName = `./app/schema/mutations/${fileName}`
+  if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
+  //
+  // Create mutation
+  //
+  fs.writeFileSync(`${dirName}/create_${fileName}_mutation.js`, dot.template(
+    fs.readFileSync(__dirname + '/templates/mutations/create_mutation.js.jst').toString()
+  )({ modelName }));
+  console.info(chalk.green(`Created app/schema/mutations/${fileName}/create_${fileName}_mutation.js`))
+  //
+  // Update mutation
+  //
+  fs.writeFileSync(`${dirName}/update_${fileName}_mutation.js`, dot.template(
+    fs.readFileSync(__dirname + '/templates/mutations/update_mutation.js.jst').toString()
+  )({ modelName }));
+  console.info(chalk.green(`Created app/schema/mutations/${fileName}/update_${fileName}_mutation.js`))
+  //
+  // Destroy mutation
+  //
+  fs.writeFileSync(`${dirName}/destroy_${fileName}_mutation.js`, dot.template(
+    fs.readFileSync(__dirname + '/templates/mutations/destroy_mutation.js.jst').toString()
+  )({ modelName }));
+  console.info(chalk.green(`Created app/schema/mutations/${fileName}/destroy_${fileName}_mutation.js`))
+  //
+  // Create the index file and export the mutations
+  //
+  fs.writeFileSync(`${dirName}/index.js`, dot.template(
+    fs.readFileSync(__dirname + '/templates/mutations/index.js.jst').toString()
+  )({ modelName }));
+  console.info(chalk.green(`Created app/schema/mutations/${fileName}/index.js`))
+  //
+  // Add the mutations to the exports
+  //
+  fs.appendFileSync('./app/schema/mutations/index.js', `\nexport * as ${fileName} from './${fileName}'`)
+  //
+  // Add the server side mutations to the root mutation
+  //
+  var newLines = `    // ${modelName.singularize().capitalize()} Mutations\n    create${className}: models.${className}.createMutation(),\n    update${className}: models.${className}.updateMutation(),\n    destroy${className}: models.${className}.destroyMutation(),`
+  var mutationFile = fs.readFileSync('./app/schema/mutations.js', 'utf8')
+  var mutatedFile = mutationFile.split(/\n/)
+  mutatedFile.splice(-5, 0, newLines)
+  mutatedFile = mutatedFile.join('\n')
+  fs.writeFileSync('./app/schema/mutations.js', mutatedFile, 'utf8')
+  //
   // Create the migration
   columns.forEach(column => {
     var name = column.split(":")[0];
