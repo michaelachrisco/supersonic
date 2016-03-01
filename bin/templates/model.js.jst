@@ -1,5 +1,13 @@
 import { BaseModel } from 'supersonic'
+import * as g from 'graphql'
 
 export default class {{= data.modelName.singularize().capitalize() }} extends BaseModel {
-
+  static schema() {
+    return new g.GraphQLObjectType({
+      name: '{{= data.graphQLType.name }}',
+      fields: { {{ for (key in data.graphQLType.fields) { }}
+        {{= '' + key.toString() + ": { type: " + data.graphQLType.fields[key]['type'] + " }," }} {{ } }}
+      }
+    })
+  }
 }

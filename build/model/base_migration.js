@@ -61,6 +61,7 @@ BaseMigration.typeMap = {
   boolean: _types.Bool,
   float: _types.Float,
   integer: _types.Integer,
-  datetime: _types.DateTime
+  datetime: _types.DateTime,
+  id: _types.Id
 };
 exports.default = BaseMigration;

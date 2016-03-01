@@ -1,4 +1,3 @@
-import 'legit-inflectors'
 import fs from 'fs'
 import squel from 'squel'
 import DatabaseAdapter from './database_adapter'
@@ -63,7 +62,7 @@ export default class Relation {
     return new Relation(
       this.klass,
       this.baseSelect().where(`id = '${id}'`).limit(1)
-    ).execute()
+    ).execute().then(rows => rows[0] )
   }
 
   where(params) {

@@ -2,16 +2,16 @@ import { expect, sinon } from '../spec_helper'
 import BaseModel from '../../core/model/base_model'
 
 describe('BaseModel', () => {
-  describe('.create', () => {
-    it('should create an escaped sql string', () => {
-      var sqlTemplate = BaseModel.create({foo: 'bar', baz: 'baloney'})
-      var expected = {
-        text: 'INSERT INTO base_models (foo, baz) VALUES ($1, $2) RETURNING *',
-        values: [ 'bar', 'baloney' ],
-      }
-      expect(sqlTemplate).to.eql(expected)
-    })
-  })
+  //describe('.create', () => {
+  //  it('should create an escaped sql string', () => {
+  //    var sqlTemplate = BaseModel.create({foo: 'bar', baz: 'baloney'})
+  //    var expected = {
+  //      text: 'INSERT INTO base_models (foo, baz) VALUES ($1, $2) RETURNING *',
+  //      values: [ 'bar', 'baloney' ],
+  //    }
+  //    expect(sqlTemplate).to.eql(expected)
+  //  })
+  //})
 
   describe('initialize', () => {
     it('should assign all the passed in attributes', () => {

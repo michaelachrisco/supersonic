@@ -125,7 +125,9 @@ export default class DatabaseAdapter {
         var migrationsToPerform = []
 
         files.forEach(file => {
-          if (!completedMigrations.include(file.replace(/\.js/, ''))) migrationsToPerform.push(file)
+          if (file.match(/\.js$/)) {
+            if (!completedMigrations.include(file.replace(/\.js/, ''))) migrationsToPerform.push(file)
+          }
         })
 
         migrationsToPerform.forEach(migration => this.performMigration(migration))

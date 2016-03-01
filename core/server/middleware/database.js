@@ -3,7 +3,6 @@ import fs from 'fs'
 import DatabaseAdapter from '../../model/database_adapter'
 import SQL from 'sql-template-strings'
 
-
 export default async (ctx, next) => {
   var dbConfig = JSON.parse(fs.readFileSync(process.cwd() + '/config/db.json').toString())[process.env.NODE_ENV || 'development']
   var adapter = new DatabaseAdapter(dbConfig)

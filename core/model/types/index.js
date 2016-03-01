@@ -4,6 +4,7 @@ import Bool from './boolean'
 import Integer from './integer'
 import Float from './float'
 import DateTime from './datetime'
+import Id from './id'
 
 export {
   Str,
@@ -11,5 +12,6 @@ export {
   Bool,
   Integer,
   Float,
-  DateTime
+  DateTime,
+  Id
 }

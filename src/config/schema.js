@@ -1,22 +1,8 @@
-import {
-  graphql,
-  GraphQLSchema,
-  GraphQLObjectType,
-  GraphQLString
-} from 'graphql'
+import * as g from 'graphql'
+import queries from '~/app/schema/queries'
 
-var schema = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'RootQueryType',
-    fields: {
-      hello: {
-        type: GraphQLString,
-        resolve() {
-          return 'world'
-        }
-      }
-    }
-  })
+const schema = new g.GraphQLSchema({
+  query: queries
 })
 
 export default schema

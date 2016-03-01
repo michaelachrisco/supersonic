@@ -1,5 +1,6 @@
 var spawn = require('child_process').spawn;
 var exec = require('child_process').execSync;
+var fs = require('fs');
 
 exports.clean = function() {
   exec('rm -rf build');
@@ -40,5 +41,9 @@ exports.server = function() {
 }
 
 exports.build = function() {
+  if (!fs.existsSync('./build')) fs.mkdirSync('./build');
+  if (!fs.existsSync('./build/app')) fs.mkdirSync('./build/app');
+  if (!fs.existsSync('./build/config')) fs.mkdirSync('./build/config');
+  if (!fs.existsSync('./build/server')) fs.mkdirSync('./build/server');
   exec('babel app server config -d build/app build/server build/config');
 }

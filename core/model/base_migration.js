@@ -4,7 +4,8 @@ import {
   Bool,
   Float,
   Integer,
-  DateTime
+  DateTime,
+  Id
 } from './types'
 
 export default class BaseMigration {
@@ -14,7 +15,8 @@ export default class BaseMigration {
     boolean: Bool,
     float: Float,
     integer: Integer,
-    datetime: DateTime
+    datetime: DateTime,
+    id: Id
   };
 
   createTable(structure) {
