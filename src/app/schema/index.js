@@ -1,2 +1,2 @@
-export queries from './queries'
-export mutations from './mutations'
+export queryType from './queries'
+export mutationType from './mutations'

@@ -23,7 +23,7 @@ exports.run = function() {
   // Run the console
   var replServer = repl.start()
   replServer.context.BaseModel = BaseModel
-  for (let model in models) {
+  for (var model in models) {
     replServer.context[model] = models[model]
   }
   replServer.context.db = db.client()

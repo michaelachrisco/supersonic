@@ -43,7 +43,7 @@ switch (command) {
     generate.call(userArgs);
     break;
   case 'clean':
-    gserverCommands.clean();
+    serverCommands.clean();
   case 'db:migrate':
     db.migrate()
     break;

@@ -5,7 +5,13 @@ import * as r from 'graphql-relay'
 import { nodeInterface } from '~/app/schema/node_type'
 
 export default class {{= data.modelName.singularize().capitalize() }} extends BaseModel {
-  static schema() {
+  static get schema() {
+    if (this._schema) return this._schema
+    this.generateSchema()
+    return this._schema
+  }
+
+  static generateSchema() {
     return new g.GraphQLObjectType({
       name: '{{= data.graphQLType.name }}',
       fields: { {{ for (key in data.graphQLType.fields) { }}
@@ -39,7 +45,7 @@ export default class {{= data.modelName.singularize().capitalize() }} extends Ba
       name: 'update{{= data.graphQLType.name }}',
       inputFields: { {{ for (let in data.graphQLType.fields) { }}
         {{= '' + key.toString() + ": { type: new g.GraphQLNonNull(" + data.graphQLType.fields[key]['type'] + ") }," }} {{ } }}
-        id: { type: new g.graphQLNonNull(g.GraphQLID) }
+        id: { type: new g.GraphQLNonNull(g.GraphQLID) }
       },
       outputFields: {
         {{= data.modelName.singularize().underscore() }}: {
@@ -60,7 +66,7 @@ export default class {{= data.modelName.singularize().capitalize() }} extends Ba
     return r.mutationWithClientMutationId({
       name: 'destroy{{= data.graphQLType.name }}',
       inputFields: {
-        id: { type: new g.graphQLNonNull(g.GraphQLID) }
+        id: { type: new g.GraphQLNonNull(g.GraphQLID) }
       },
       outputFields: {
         {{= data.modelName.singularize().underscore() }}: {
