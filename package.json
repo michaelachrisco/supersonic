@@ -88,7 +88,7 @@
     "squel": "4.3.2",
     "style-loader": "0.13.0",
     "webpack": "1.12.6",
-    "webpack-dev-server": "1.12.1"
-    "webpack-stream": "3.1.0",
+    "webpack-dev-server": "1.12.1",
+    "webpack-stream": "3.1.0"
   }
 }
