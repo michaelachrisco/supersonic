@@ -130,7 +130,7 @@ export default class DatabaseAdapter {
           }
         })
 
-        migrationsToPerform.forEach(migration => this.performMigration(migration))
+        migrationsToPerform.sort().forEach(migration => this.performMigration(migration))
       })
     })
   }

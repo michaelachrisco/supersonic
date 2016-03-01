@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _immutable = require('immutable');
+
 var _types = require('./types');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28,7 +30,8 @@ var BaseMigration = function () {
           var key = _step.value;
 
           if (key !== 'tableName') {
-            sql = sql + ('\n  ' + key + ' ' + BaseMigration.typeMap[structure[key]].pgType + ',');
+            var type = BaseMigration.typeMap.get(structure[key], _types.Str).pgType;
+            sql = sql + ('\n  ' + key + ' ' + type + ',');
           }
         }
       } catch (err) {
@@ -55,7 +58,7 @@ var BaseMigration = function () {
   return BaseMigration;
 }();
 
-BaseMigration.typeMap = {
+BaseMigration.typeMap = (0, _immutable.Map)({
   string: _types.Str,
   text: _types.Text,
   boolean: _types.Bool,
@@ -63,5 +66,5 @@ BaseMigration.typeMap = {
   integer: _types.Integer,
   datetime: _types.DateTime,
   id: _types.Id
-};
+});
 exports.default = BaseMigration;

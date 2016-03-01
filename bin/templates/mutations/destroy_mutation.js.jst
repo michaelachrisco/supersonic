@@ -1,0 +1,23 @@
+import Relay from 'react-relay'
+
+export default class Destroy{{= data.modelName.singularize().capitalize() }}Mutation extends Relay.Mutation {
+  static fragments = { };
+
+  getMutation() {
+    return Relay.QL`mutation { destroy{{= data.modelName.singularize().capitalize() }} }`
+  }
+
+  getVariables() {
+    return { }
+  }
+
+  getFatQuery() {
+    return Relay.QL`
+      fragment on Destroy{{= data.modelName.singularize().capitalize() }}Payload { }
+    `
+  }
+
+  getConfigs() {
+    return [ ]
+  }
+}

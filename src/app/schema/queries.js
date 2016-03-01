@@ -1,9 +1,13 @@
 import * as g from 'graphql'
 import * as models from '~/app/models'
 
-const queries = {
-  name: 'Query',
-  fields: {}
-}
+import { nodeField } from '~/app/schema/node_type'
 
-export default queries
+const queryType = new g.GraphQLObjectType({
+  name: 'Query',
+  fields: {
+    node: nodeField
+  }
+})
+
+export default queryType

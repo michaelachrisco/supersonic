@@ -1,6 +1,7 @@
 import squel from 'squel'
 import fs from 'fs'
 import * as g from 'graphql'
+import * as r from 'graphql-relay'
 
 import Relation from './relation'
 import DatabaseAdapter from './database_adapter'
@@ -17,7 +18,7 @@ export default class BaseModel {
       returning('*').
       toParam()
 
-    return BaseModel.transaction(query)
+    return BaseModel.transaction(query).then(rows => rows[0])
   };
 
   static relation(name) {
@@ -55,7 +56,7 @@ export default class BaseModel {
       case /boolean/.test(type):
         return 'g.GraphQLBoolean'
       case /id/.test(type):
-        return 'g.GraphQLID'
+        return 'r.globalIdField()'
       default:
         return 'g.GraphQLString'
     }

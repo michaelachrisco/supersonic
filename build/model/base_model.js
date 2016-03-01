@@ -18,6 +18,10 @@ var _graphql = require('graphql');
 
 var g = _interopRequireWildcard(_graphql);
 
+var _graphqlRelay = require('graphql-relay');
+
+var r = _interopRequireWildcard(_graphqlRelay);
+
 var _relation = require('./relation');
 
 var _relation2 = _interopRequireDefault(_relation);
@@ -41,7 +45,9 @@ var BaseModel = function () {
 
       var query = pg.insert().into(tableName).setFields(params).returning('*').toParam();
 
-      return BaseModel.transaction(query);
+      return BaseModel.transaction(query).then(function (rows) {
+        return rows[0];
+      });
     }
   }, {
     key: 'relation',
@@ -85,7 +91,7 @@ var BaseModel = function () {
         case /boolean/.test(type):
           return 'g.GraphQLBoolean';
         case /id/.test(type):
-          return 'g.GraphQLID';
+          return 'r.globalIdField()';
         default:
           return 'g.GraphQLString';
       }

@@ -1,5 +1,8 @@
 import { BaseModel } from 'supersonic'
 import * as g from 'graphql'
+import * as r from 'graphql-relay'
+
+import { nodeInterface } from '~/app/schema/node_type'
 
 export default class {{= data.modelName.singularize().capitalize() }} extends BaseModel {
   static schema() {
@@ -7,6 +10,68 @@ export default class {{= data.modelName.singularize().capitalize() }} extends Ba
       name: '{{= data.graphQLType.name }}',
       fields: { {{ for (key in data.graphQLType.fields) { }}
         {{= '' + key.toString() + ": { type: " + data.graphQLType.fields[key]['type'] + " }," }} {{ } }}
+      },
+      interfaces: [nodeInterface]
+    })
+  }
+
+  static createMutation() {
+    return r.mutationWithClientMutationId({
+      name: 'create{{= data.graphQLType.name }}',
+      inputFields: { {{ for (key in data.graphQLType.fields) { }}
+        {{= '' + key.toString() + ": { type: new g.GraphQLNonNull(" + data.graphQLType.fields[key]['type'] + ") }," }} {{ } }}
+      },
+      outputFields: {
+        {{= data.modelName.singularize().underscore() }}: {
+          type: {{= data.modelName.singularize().capitalize() }}.schema,
+          resolve: (payload) => {{= data.modelName.singularize().capitalize() }}.find(payload.{{= data.modelName.singularize().underscore() }}_id)
+        }
+      },
+      mutateAndGetPayload: (inputs) => {
+        let {{= data.modelName.singularize().underscore() }} = {{= data.modelName.singularize().capitalize() }}.create(inputs)
+        return { {{= data.modelName.singularize().underscore() }}_id: {{= data.modelName.singularize().underscore() }}.id }
+      }
+    })
+  }
+
+  static updateMutation() {
+    return r.mutationWithClientMutationId({
+      name: 'update{{= data.graphQLType.name }}',
+      inputFields: { {{ for (let in data.graphQLType.fields) { }}
+        {{= '' + key.toString() + ": { type: new g.GraphQLNonNull(" + data.graphQLType.fields[key]['type'] + ") }," }} {{ } }}
+        id: { type: new g.graphQLNonNull(g.GraphQLID) }
+      },
+      outputFields: {
+        {{= data.modelName.singularize().underscore() }}: {
+          type: {{= data.modelName.singularize().capitalize() }}.schema,
+          resolve: (payload) => {{= data.modelName.singularize().capitalize() }}.find(payload.{{= data.modelName.singularize().underscore() }}_id)
+        }
+      },
+      mutateAndGetPayload: (inputs) => {
+        let { id, ...params } = inputs
+        let {{= data.modelName.singularize().underscore() }} = {{= data.modelName.singularize().capitalize() }}.find(id)
+        {{= data.modelName.singularize().underscore() }}.update(params)
+        return { {{= data.modelName.singularize().underscore() }}_id: {{= data.modelName.singularize().underscore() }}.id }
+      }
+    })
+  }
+
+  static destroyMutation() {
+    return r.mutationWithClientMutationId({
+      name: 'destroy{{= data.graphQLType.name }}',
+      inputFields: {
+        id: { type: new g.graphQLNonNull(g.GraphQLID) }
+      },
+      outputFields: {
+        {{= data.modelName.singularize().underscore() }}: {
+          type: {{= data.modelName.singularize().capitalize() }}.schema,
+          resolve: (payload) => {{= data.modelName.singularize().capitalize() }}.find(payload.{{= data.modelName.singularize().underscore() }}_id)
+        }
+      },
+      mutateAndGetPayload: (inputs) => {
+        let {{= data.modelName.singularize().underscore() }} = {{= data.modelName.singularize().capitalize() }}.find(inputs.id)
+        {{= data.modelName.singularize().underscore() }}.destroy()
+        return { {{= data.modelName.singularize().underscore() }}_id: {{= data.modelName.singularize().underscore() }}.id }
       }
     })
   }

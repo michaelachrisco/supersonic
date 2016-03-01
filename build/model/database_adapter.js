@@ -167,7 +167,7 @@ var DatabaseAdapter = function () {
             }
           });
 
-          migrationsToPerform.forEach(function (migration) {
+          migrationsToPerform.sort().forEach(function (migration) {
             return _this4.performMigration(migration);
           });
         });

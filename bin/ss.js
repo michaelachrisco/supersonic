@@ -7,15 +7,23 @@ var serverCommands = require('./server');
 var buildApp = require('./buildApp');
 var db = require('./db');
 var generate = require('./generate');
-var console = require('./console');
+var ssConsole = require('./console');
 var spawn = require('child_process').spawn;
 var userArgs = process.argv.slice(2);
 var command = userArgs[0];
 
 function runServer() {
-  serverCommands.watch();
-  serverCommands.devServer();
-  serverCommands.server();
+  var server = spawn('gulp', [], { customFds: [0, 1, 2] });
+}
+
+function dumpSchema() {
+  var graphql = require('graphql').graphql;
+  var introspectionQuery = require('graphql/utilities').introspectionQuery;
+  var schema = require(process.cwd() + '/config/schema').default;
+
+  graphql(schema, introspectionQuery).then(result => {
+    console.log(result);
+  })
 }
 
 switch (command) {
@@ -29,11 +37,13 @@ switch (command) {
     buildApp.build(userArgs[1]);
     break;
   case 'console':
-    console.run()
+    ssConsole.run()
     break;
   case 'generate':
     generate.call(userArgs);
     break;
+  case 'clean':
+    gserverCommands.clean();
   case 'db:migrate':
     db.migrate()
     break;
@@ -59,6 +69,6 @@ switch (command) {
     generate.call(userArgs);
     break;
   case 'c':
-    console.run()
+    ssConsole.run()
     break;
 }

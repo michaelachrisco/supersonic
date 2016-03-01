@@ -1,0 +1,29 @@
+import Relay from 'react-relay'
+
+export default class Update{{= data.modelName.singularize().capitalize() }}Mutation extends Relay.Mutation {
+  static fragments = {
+    {{= data.modelName.singularize().underscore() }}: () => Relay.QL`
+      fragment on {{= data.modelName.singularize().capitalize() }} {
+        id
+      }
+    `
+  };
+
+  getMutation() {
+    return Relay.QL`mutation { update{{= data.modelName.singularize().capitalize() }} }`
+  }
+
+  getVariables() {
+    return { }
+  }
+
+  getFatQuery() {
+    return Relay.QL`
+      fragment on Update{{= data.modelName.singularize().capitalize() }}Payload { }
+    `
+  }
+
+  getConfigs() {
+    return [ ]
+  }
+}
