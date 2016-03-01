@@ -28,7 +28,6 @@ export default class BaseMigration {
     }
     sql = sql + `\n  created_at timestamp DEFAULT current_timestamp,`
     sql = sql + `\n  updated_at timestamp DEFAULT current_timestamp,`
-    console.log(sql)
     return sql + `\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid()\n);`
   }
 }
