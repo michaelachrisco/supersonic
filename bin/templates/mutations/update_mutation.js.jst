@@ -19,7 +19,9 @@ export default class Update{{= data.modelName.singularize().capitalize() }}Mutat
 
   getFatQuery() {
     return Relay.QL`
-      fragment on Update{{= data.modelName.singularize().capitalize() }}Payload { }
+      fragment on Update{{= data.modelName.singularize().capitalize() }}Payload {
+        {{= data.modelName.singularize().underscore() }}
+      }
     `
   }
 

@@ -51,6 +51,13 @@ export default class Relation {
     return expr.toString()
   }
 
+  all() {
+    return new Relation(
+      this.klass,
+      this.baseSelect()
+    ).execute()
+  }
+
   first() {
     return new Relation(
       this.klass,
@@ -62,7 +69,7 @@ export default class Relation {
     return new Relation(
       this.klass,
       this.baseSelect().where(`id = '${id}'`).limit(1)
-    ).execute().then(rows => rows[0] )
+    ).execute().then(rows => rows ? rows[0] : null )
   }
 
   where(params) {

@@ -13,7 +13,9 @@ export default class Destroy{{= data.modelName.singularize().capitalize() }}Muta
 
   getFatQuery() {
     return Relay.QL`
-      fragment on Destroy{{= data.modelName.singularize().capitalize() }}Payload { }
+      fragment on Destroy{{= data.modelName.singularize().capitalize() }}Payload {
+        {{= data.modelName.singularize().underscore() }}
+      }
     `
   }
 

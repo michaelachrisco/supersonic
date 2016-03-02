@@ -55,6 +55,11 @@ var BaseModel = function () {
       return new _relation2.default(eval(name));
     }
   }, {
+    key: 'all',
+    value: function all() {
+      return BaseModel.relation(this).all();
+    }
+  }, {
     key: 'first',
     value: function first() {
       return BaseModel.relation(this).first();
@@ -91,7 +96,7 @@ var BaseModel = function () {
         case /boolean/.test(type):
           return 'g.GraphQLBoolean';
         case /id/.test(type):
-          return 'r.globalIdField()';
+          return 'g.GraphQLID';
         default:
           return 'g.GraphQLString';
       }
@@ -102,7 +107,7 @@ var BaseModel = function () {
       var structure = {
         name: name.singularize().capitalize(),
         fields: {
-          id: { type: 'g.GraphQLID' },
+          id: { type: 'r.globalField(\'' + name.singularize().capitalize() + '\')' },
           created_at: { type: 'g.GraphQLString' },
           updated_at: { type: 'g.GraphQLString' }
         }

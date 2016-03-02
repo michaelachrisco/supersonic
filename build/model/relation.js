@@ -72,6 +72,11 @@ var Relation = function () {
       return expr.toString();
     }
   }, {
+    key: 'all',
+    value: function all() {
+      return new Relation(this.klass, this.baseSelect()).execute();
+    }
+  }, {
     key: 'first',
     value: function first() {
       return new Relation(this.klass, this.baseSelect().limit(1)).execute();
@@ -80,7 +85,7 @@ var Relation = function () {
     key: 'find',
     value: function find(id) {
       return new Relation(this.klass, this.baseSelect().where('id = \'' + id + '\'').limit(1)).execute().then(function (rows) {
-        return rows[0];
+        return rows ? rows[0] : null;
       });
     }
   }, {

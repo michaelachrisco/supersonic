@@ -12,7 +12,7 @@ export default class {{= data.modelName.singularize().capitalize() }} extends Ba
   }
 
   static generateSchema() {
-    return new g.GraphQLObjectType({
+    this._schema = new g.GraphQLObjectType({
       name: '{{= data.graphQLType.name }}',
       fields: { {{ for (key in data.graphQLType.fields) { }}
         {{= '' + key.toString() + ": { type: " + data.graphQLType.fields[key]['type'] + " }," }} {{ } }}
@@ -43,9 +43,8 @@ export default class {{= data.modelName.singularize().capitalize() }} extends Ba
   static updateMutation() {
     return r.mutationWithClientMutationId({
       name: 'update{{= data.graphQLType.name }}',
-      inputFields: { {{ for (let in data.graphQLType.fields) { }}
+      inputFields: { {{ for (key in data.graphQLType.fields) { }}
         {{= '' + key.toString() + ": { type: new g.GraphQLNonNull(" + data.graphQLType.fields[key]['type'] + ") }," }} {{ } }}
-        id: { type: new g.GraphQLNonNull(g.GraphQLID) }
       },
       outputFields: {
         {{= data.modelName.singularize().underscore() }}: {

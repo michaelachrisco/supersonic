@@ -25,6 +25,10 @@ export default class BaseModel {
     return new Relation(eval(name))
   }
 
+  static all() {
+    return BaseModel.relation(this).all()
+  }
+
   static first() {
     return BaseModel.relation(this).first()
   }
@@ -56,7 +60,7 @@ export default class BaseModel {
       case /boolean/.test(type):
         return 'g.GraphQLBoolean'
       case /id/.test(type):
-        return 'r.globalIdField()'
+        return 'g.GraphQLID'
       default:
         return 'g.GraphQLString'
     }
@@ -66,7 +70,7 @@ export default class BaseModel {
     var structure = {
       name: name.singularize().capitalize(),
       fields: {
-        id: { type: 'g.GraphQLID' },
+        id: { type: `r.globalField('${name.singularize().capitalize()}')` },
         created_at: { type: 'g.GraphQLString' },
         updated_at: { type: 'g.GraphQLString' }
       }
