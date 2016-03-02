@@ -16,15 +16,12 @@ module.exports = {
     extensions: ['', '.js', '.jsx', '.scss'],
     modulesDirectories: ["node_modules"]
   },
-  externals: {
-    'supersonic': 'supersonic'
-  },
   module: {
     loaders: [
       {
         test: /\.jsx$|\.js$/,
         loaders: ['react-hot', 'babel'],
-        exclude: /node_modules/
+        include: /client|routes|views/
       },
       {
         test: /\.scss$/,
