@@ -15,8 +15,7 @@
   },
   "author": "Darin Haener <dphaener@gmail.com> (https://github.com/dphaener)",
   "license": "ISC",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "babel-cli": "6.5.1",
     "babel-core": "6.5.2",
@@ -46,6 +45,7 @@
     "gulp-graphql": "0.2.0",
     "gulp-livereload": "3.8.1",
     "gulp-nodemon": "2.0.6",
+    "gulp-util": "^3.0.7",
     "gulp-watch": "4.3.5",
     "history": "1.13.1",
     "immutable": "3.7.6",

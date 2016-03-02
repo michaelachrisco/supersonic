@@ -52,13 +52,13 @@ function renderPage(props) {
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
-        <link href="http://localhost:8080/js/styles.css" rel="stylesheet" />
+        <link href="http://localhost:8080/styles.css" rel="stylesheet" />
         <title>${props.title}</title>
       </head>
       <body>
         <div id="app">${props.content}</div>
         <script id="preloadedData" type="application/json">${JSON.stringify(props.preloadedData)}</script>
-        <script src="http://localhost:8080/js/app.js"></script>
+        <script src="http://localhost:8080/app.js"></script>
       </body>
     </html>
   `

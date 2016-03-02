@@ -7,7 +7,9 @@ var gulp = require('gulp'),
   livereload = require('gulp-livereload'),
   babel = require('gulp-babel'),
   graphql = require('gulp-graphql'),
-  webpack = require('webpack-stream');
+  webpack = require('webpack'),
+  WebpackDevServer = require('webpack-dev-server'),
+  gutil = require('gulp-util')
 
 gulp.task('app', function () {
   gulp.src(['app/**/*.js', 'app/**/*.jsx']).
@@ -40,9 +42,19 @@ gulp.task('schema', function () {
 });
 
 gulp.task('webpack', function () {
-  return gulp.src('client/entry.js')
-    .pipe(webpack( require('./server/webpack.config.dev.js') ))
-    .pipe(gulp.dest('dist'));
+  var config = require('./server/webpack.config.dev.js')
+
+  new WebpackDevServer(webpack(config), {
+    publicPath: config.output.publicPath,
+    hot: true,
+    inline: true,
+    stats: {
+      colors: true
+    }
+  }).listen(8080, "localhost", function(err) {
+    if(err) throw new gutil.PluginError("webpack-dev-server", err);
+    gutil.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/index.html")
+  })
 });
 
 gulp.task('watch', function () {

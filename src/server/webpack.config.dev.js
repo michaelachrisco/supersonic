@@ -8,13 +8,16 @@ module.exports = {
   devtool: 'inline-source-map',
   entry: ['webpack-dev-server/client?http://localhost:8080', 'webpack/hot/only-dev-server', './client/entry'],
   output: {
-    path: __dirname + '/public/js/',
+    path: __dirname + '/public/'
     filename: 'app.js',
-    publicPath: 'http://localhost:8080/js/'
+    publicPath: 'http://localhost:8080/'
   },
   resolve: {
     extensions: ['', '.js', '.jsx', '.scss'],
     modulesDirectories: ["node_modules"]
+  },
+  externals: {
+    'supersonic': 'supersonic'
   },
   module: {
     loaders: [
@@ -29,5 +32,9 @@ module.exports = {
       }
     ]
   },
-  plugins: [new webpack.NoErrorsPlugin(), new ExtractTextPlugin('styles.css')]
+  plugins: [
+    new webpack.NoErrorsPlugin(),
+    new ExtractTextPlugin('styles.css'),
+    new webpack.HotModuleReplacementPlugin()
+  ]
 }

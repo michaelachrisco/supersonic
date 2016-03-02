@@ -70,7 +70,7 @@ export default class BaseModel {
     var structure = {
       name: name.singularize().capitalize(),
       fields: {
-        id: { type: `r.globalField('${name.singularize().capitalize()}')` },
+        id: { type: `r.globalIdField('${name.singularize().capitalize()}')` },
         created_at: { type: 'g.GraphQLString' },
         updated_at: { type: 'g.GraphQLString' }
       }
