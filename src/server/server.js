@@ -18,8 +18,7 @@ import bodyParser from 'koa-body-parser'
 import {
   Router,
   SchemaBuilder,
-  ApplicationMiddleware,
-  NetworkLayer
+  ApplicationMiddleware
 } from 'supersonic'
 
 // Custom middleware and the router
@@ -32,7 +31,7 @@ const app = new Koa()
 // Inject the network layer into Relay. This should be the
 // same network layer that you will be injecting into the
 // client entry point.
-Relay.injectNetworkLayer(new NetworkLayer())
+Relay.injectNetworkLayer(new Relay.DefaultNetworkLayer('/graphql'))
 
 // App setup middleware
 //

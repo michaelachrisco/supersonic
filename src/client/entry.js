@@ -5,9 +5,6 @@ import { render } from 'react-dom'
 import IsomorphicRelay from 'isomorphic-relay'
 import IsomorphicRouter from 'isomorphic-relay-router'
 
-// Default Network Layer from Supersonic
-import { NetworkLayer } from 'supersonic'
-
 // Browser History
 import createBrowserHistory from 'history/lib/createBrowserHistory'
 
@@ -21,7 +18,7 @@ import '../app/assets/stylesheets/app'
 // You can create your own from scratch if you need custom
 // behavior, or sub class the NetworkLayer class and
 // override functionality.
-Relay.injectNetworkLayer(new NetworkLayer())
+Relay.injectNetworkLayer(new Relay.DefaultNetworkLayer('/graphql'))
 
 // Parse the preloaded data
 const data = JSON.parse(document.getElementById('preloadedData').textContent)
