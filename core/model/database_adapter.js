@@ -89,7 +89,7 @@ export default class DatabaseAdapter {
 
   performMigration(migration) {
     var mig = require(`${process.cwd()}/db/migrate/${migration}`).default
-    var queryString = (new mig()).change()
+    var queryString = new mig().change()
 
     return this.runQuery(queryString).
     then(rows => {

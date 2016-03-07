@@ -1,13 +1,13 @@
 {
   "name": "supersonic",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "A micro javascript framework built on React and Relay",
   "main": "build/supersonic.js",
   "bin": {
     "ss": "bin/ss.js"
   },
   "scripts": {
-    "prePublish": "npm build",
+    "prepublish": "npm build",
     "test": "env NODE_ENV=test mocha --opts ./spec/mocha.opts",
     "clean": "rm -rf build",
     "build": "babel core -d build",

@@ -20,7 +20,27 @@ exports.call = function(args) {
     case 'model':
       generateModel(args);
       break;
+    case 'migration':
+      generateMigration(args)
   }
+}
+
+function generateMigration(args) {
+  dot.templateSettings.strip = false;
+  dot.templateSettings.varname = 'data';
+
+  var now = new Date();
+
+  // Create the migration file
+  //
+  fs.writeFileSync(
+    './db/migrate/' + now.timestamp() + '_' + args[2].underscore() + '.js',
+    dot.template(
+      fs.readFileSync(__dirname + '/templates/basic_migration.js.jst').toString()
+    )({ migrationName: args[2].underscore() })
+  );
+
+  console.info(chalk.green(`Created db/migrate/${now.timestamp()}_${args[2].underscore()}.js`))
 }
 
 function generateModel(args) {

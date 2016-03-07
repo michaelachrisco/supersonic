@@ -32,4 +32,16 @@ export default class BaseMigration {
     sql = sql + `\n  updated_at timestamp DEFAULT current_timestamp,`
     return sql + `\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid()\n);`
   }
+
+  addColumns(structure) {
+    var sql = `ALTER TABLE ${structure.tableName}`
+    Object.keys(structure).forEach((key, index) => {
+      if (key !== 'tableName') {
+        var delimiter = index === Object.keys(structure).length - 1 ? ';' : ','
+        var type = BaseMigration.typeMap.get(structure[key], Str).pgType
+        sql = sql + `\n ADD COLUMN ${key} ${type}${delimiter}`
+      }
+    })
+    return sql
+  }
 }
