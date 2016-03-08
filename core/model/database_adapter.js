@@ -2,6 +2,7 @@ import pg from 'pg-then'
 import fs from 'fs'
 import { heredoc } from '../utils/strings'
 import chalk from 'chalk'
+import { forEach } from 'async-foreach'
 
 export default class DatabaseAdapter {
   constructor(connParams) {
@@ -130,7 +131,10 @@ export default class DatabaseAdapter {
           }
         })
 
-        migrationsToPerform.sort().forEach(migration => this.performMigration(migration))
+        forEach(migrationsToPerform.sort(), function(migration) {
+          var done = this.async()
+          this.performMigration(migration).then(res => done())
+        })
       })
     })
   }
