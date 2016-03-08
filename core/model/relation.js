@@ -62,7 +62,7 @@ export default class Relation {
     return new Relation(
       this.klass,
       this.baseSelect().limit(1)
-    ).execute()
+    ).execute().then(rows => rows ? rows[0] : null )
   }
 
   find(id) {
