@@ -4,7 +4,7 @@ import * as r from 'graphql-relay'
 
 import { nodeInterface } from '~/app/schema/node_type'
 
-export default class {{= data.modelName.singularize().capitalize() }} extends BaseModel {
+export default class {{= data.modelName.classify() }} extends BaseModel {
   static get schema() {
     if (this._schema) return this._schema
     this.generateSchema()
@@ -29,12 +29,12 @@ export default class {{= data.modelName.singularize().capitalize() }} extends Ba
       },
       outputFields: {
         {{= data.modelName.singularize().underscore() }}: {
-          type: {{= data.modelName.singularize().capitalize() }}.schema,
-          resolve: (payload) => {{= data.modelName.singularize().capitalize() }}.find(payload.{{= data.modelName.singularize().underscore() }}_id)
+          type: {{= data.modelName.classify() }}.schema,
+          resolve: (payload) => {{= data.modelName.classify() }}.find(payload.{{= data.modelName.singularize().underscore() }}_id)
         }
       },
       mutateAndGetPayload: (inputs) => {
-        let {{= data.modelName.singularize().underscore() }} = {{= data.modelName.singularize().capitalize() }}.create(inputs)
+        let {{= data.modelName.singularize().underscore() }} = {{= data.modelName.classify() }}.create(inputs)
         return { {{= data.modelName.singularize().underscore() }}_id: {{= data.modelName.singularize().underscore() }}.id }
       }
     })
@@ -48,13 +48,13 @@ export default class {{= data.modelName.singularize().capitalize() }} extends Ba
       },
       outputFields: {
         {{= data.modelName.singularize().underscore() }}: {
-          type: {{= data.modelName.singularize().capitalize() }}.schema,
-          resolve: (payload) => {{= data.modelName.singularize().capitalize() }}.find(payload.{{= data.modelName.singularize().underscore() }}_id)
+          type: {{= data.modelName.classify() }}.schema,
+          resolve: (payload) => {{= data.modelName.classify() }}.find(payload.{{= data.modelName.singularize().underscore() }}_id)
         }
       },
       mutateAndGetPayload: (inputs) => {
         let { id, ...params } = inputs
-        let {{= data.modelName.singularize().underscore() }} = {{= data.modelName.singularize().capitalize() }}.find(id)
+        let {{= data.modelName.singularize().underscore() }} = {{= data.modelName.classify() }}.find(id)
         {{= data.modelName.singularize().underscore() }}.update(params)
         return { {{= data.modelName.singularize().underscore() }}_id: {{= data.modelName.singularize().underscore() }}.id }
       }
@@ -69,12 +69,12 @@ export default class {{= data.modelName.singularize().capitalize() }} extends Ba
       },
       outputFields: {
         {{= data.modelName.singularize().underscore() }}: {
-          type: {{= data.modelName.singularize().capitalize() }}.schema,
-          resolve: (payload) => {{= data.modelName.singularize().capitalize() }}.find(payload.{{= data.modelName.singularize().underscore() }}_id)
+          type: {{= data.modelName.classify() }}.schema,
+          resolve: (payload) => {{= data.modelName.classify() }}.find(payload.{{= data.modelName.singularize().underscore() }}_id)
         }
       },
       mutateAndGetPayload: (inputs) => {
-        let {{= data.modelName.singularize().underscore() }} = {{= data.modelName.singularize().capitalize() }}.find(inputs.id)
+        let {{= data.modelName.singularize().underscore() }} = {{= data.modelName.classify() }}.find(inputs.id)
         {{= data.modelName.singularize().underscore() }}.destroy()
         return { {{= data.modelName.singularize().underscore() }}_id: {{= data.modelName.singularize().underscore() }}.id }
       }
