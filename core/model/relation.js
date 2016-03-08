@@ -58,6 +58,13 @@ export default class Relation {
     ).execute()
   }
 
+  limit(count = 10) {
+    return new Relation(
+      this.klass,
+      this.baseSelect().limit(count)
+    )
+  }
+
   first() {
     return new Relation(
       this.klass,

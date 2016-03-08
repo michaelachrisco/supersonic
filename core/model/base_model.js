@@ -29,6 +29,10 @@ export default class BaseModel {
     return BaseModel.relation(this).all()
   }
 
+  static limit(count) {
+    return BaseModel.relation(this).limit(count)
+  }
+
   static first() {
     return BaseModel.relation(this).first()
   }
