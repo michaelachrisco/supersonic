@@ -131,7 +131,7 @@ export default class DatabaseAdapter {
           }
         })
 
-        forEach(migrationsToPerform.sort(), function(migration) {
+        forEach(migrationsToPerform.sort(), function(migration, index, arr) {
           var done = this.async()
           this.performMigration(migration).then(res => done())
         })
