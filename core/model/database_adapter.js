@@ -116,6 +116,7 @@ export default class DatabaseAdapter {
   }
 
   performMigrations() {
+    var self = this
     var files = fs.readdirSync(`${process.cwd()}/db/migrate/`)
 
     this.createMigrationSchema().
@@ -133,7 +134,7 @@ export default class DatabaseAdapter {
 
         forEach(migrationsToPerform.sort(), function(migration, index, arr) {
           var done = this.async()
-          this.performMigration(migration).then(res => done())
+          self.performMigration(migration).then(res => done())
         })
       })
     })
