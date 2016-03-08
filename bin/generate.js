@@ -56,7 +56,7 @@ function generateModel(args) {
   var now = new Date();
   var graphQLType = BaseModel.buildGraphQLType(columns, modelName)
   var fileName = modelName.singularize().underscore()
-  var className = modelName.singularize().capitalize()
+  var className = modelName.classify()
 
   // Create the model file
   fs.writeFileSync(`./app/models/${fileName}.js`, dot.template(
@@ -66,7 +66,7 @@ function generateModel(args) {
   console.info(chalk.green(`Created app/models/${fileName}.js`))
 
   // Add the new model to the models export
-  fs.appendFileSync('./app/models/index.js', `\nexport ${className} from './${modelName.singularize()}'`)
+  fs.appendFileSync('./app/models/index.js', `export ${className} from './${fileName}'\n`)
 
   // Create the mutations
   //

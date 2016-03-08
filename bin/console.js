@@ -11,7 +11,6 @@ exports.run = function() {
   files.forEach(file => {
     if (file.match(/\.js$/) && file !== 'index.js') {
       var name = file.replace(/\.js/g, '').capitalize().singularize()
-      console.log(file)
       models[name] = require(process.cwd() + '/build/app/models/' + file).default
     }
   })
