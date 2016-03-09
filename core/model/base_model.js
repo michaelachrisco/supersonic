@@ -21,6 +21,19 @@ export default class BaseModel {
     return BaseModel.transaction(query).then(rows => rows[0])
   };
 
+  static count() {
+    let pg = squel.useFlavour('postgres')
+    let tableName = this.name.underscore().pluralize
+
+    let query = pg.
+      select().
+      from(tableName).
+      fields(['COUNT(*)']).
+      toParam()
+
+    return BaseModel.transaction(query).then(rows => rows[0].count)
+  }
+
   static relation(name) {
     return new Relation(eval(name))
   }
