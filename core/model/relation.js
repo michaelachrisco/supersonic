@@ -86,6 +86,16 @@ export default class Relation {
     )
   }
 
+  order(params) {
+    let key = Object.keys(params)[0],
+        ordering = params[key].toUpperCase() === 'ASC'
+
+    return new Relation(
+      this.klass,
+      this.baseSelect().order(key, ordering)
+    )
+  }
+
   toParam() {
     return this.relation.toParam()
   }

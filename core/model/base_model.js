@@ -36,19 +36,19 @@ export default class BaseModel {
 
   static relation(name) {
     return new Relation(eval(name))
-  }
+  };
 
   static all() {
     return BaseModel.relation(this).all()
-  }
+  };
 
   static limit(count) {
     return BaseModel.relation(this).limit(count)
-  }
+  };
 
   static first() {
     return BaseModel.relation(this).first()
-  }
+  };
 
   static find(id) {
     return BaseModel.relation(this).find(id)
@@ -58,11 +58,15 @@ export default class BaseModel {
     return BaseModel.relation(this).where(params)
   };
 
+  static order(params) {
+    return BaseModel.relation(this).order(params)
+  };
+
   static transaction(query) {
     var dbConfig = JSON.parse(fs.readFileSync(process.cwd() + '/config/db.json').toString())[process.env.NODE_ENV || 'development']
     var adapter = new DatabaseAdapter(dbConfig)
     return adapter.runQuery(query)
-  }
+  };
 
   static getGraphQLType(type) {
     switch(true) {
@@ -81,13 +85,13 @@ export default class BaseModel {
       default:
         return 'g.GraphQLString'
     }
-  }
+  };
 
   static buildGraphQLType(columns, name) {
     var structure = {
       name: name.singularize().capitalize(),
       fields: {
-        id: { type: `r.globalIdField('${name.singularize().capitalize()}')` },
+        id: r.globalIdField(`'${name.singularize().capitalize()}'`),
         created_at: { type: 'g.GraphQLString' },
         updated_at: { type: 'g.GraphQLString' }
       }
@@ -100,7 +104,29 @@ export default class BaseModel {
     })
 
     return structure
-  }
+  };
+
+  static get connection() {
+    if (this._connection) return this._connection.connectionType
+    this.generateConnection()
+    return this._connection.connectionType
+  };
+
+  static get edge() {
+    if (this._connection) return this._connection.edgeType
+    this.generateConnection()
+    return this._connection.edgeType
+  };
+
+  static get schema() {
+    if (this._schema) return this._schema
+    this.generateSchema()
+    return this._schema
+  };
+
+  static generateConnection() {
+    throw 'You must implement the generateConnection method'
+  };
 
   constructor(attributes) {
     for (let key in attributes) {
