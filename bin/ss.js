@@ -13,7 +13,7 @@ var userArgs = process.argv.slice(2);
 var command = userArgs[0];
 
 function runServer() {
-  var server = spawn('env', ['NODE_ENV=development', 'gulp'], { customFds: [0, 1, 2] });
+  var server = spawn('env', ['NODE_ENV=development', './node_modules/gulp/bin/gulp.js'], { stdio: [0, 1, 2] });
 }
 
 function dumpSchema() {

@@ -20,7 +20,7 @@ module.exports = {
     loaders: [
       {
         test: /\.jsx$|\.js$/,
-        loaders: ['react-hot', 'babel'],
+        loaders: ['react-hot', 'babel?plugins[]=babel-relay-plugin-loader'],
         include: /client|routes|views/
       },
       {
@@ -33,5 +33,10 @@ module.exports = {
     new webpack.NoErrorsPlugin(),
     new ExtractTextPlugin('styles.css'),
     new webpack.HotModuleReplacementPlugin()
-  ]
+  ],
+  metadata: {
+    graphql: {
+      schema: 'config/schema.json'
+    }
+  }
 }

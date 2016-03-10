@@ -3,6 +3,8 @@ var exec = require('child_process').execSync;
 var fs = require('fs');
 var ncp = require('ncp');
 var dot = require('dot');
+var chalk = require('chalk');
+var heredoc = require('../core/utils/strings').heredoc
 
 exports.build = function(appName) {
   fs.mkdirSync('./' + appName);
@@ -16,7 +18,7 @@ exports.build = function(appName) {
     dot.templateSettings.strip = false;
     dot.templateSettings.varname = 'data';
 
-    console.log('Copying Supersonic directory structure and files...');
+    console.log(chalk.green('Copying Supersonic directory structure and files...'));
     console.log('');
 
     // Create the package.json file
@@ -33,15 +35,26 @@ exports.build = function(appName) {
 
     child.on('exit', function() {
       var child = spawn('npm',  ['install'], {cwd: process.cwd() + '/' + appName, stdio: [process.stdin, process.stdout, process.stderr]});
-      console.log('Installing packages in this directory...');
+      console.log(chalk.yellow('Installing packages in this directory...'));
       console.log('');
 
       child.on('exit', function() {
-        console.log('All done!');
-        console.log('');
-        console.log('Supersonic is now installed and you are ready to go!');
-        console.log('');
-        console.log('cd ' + appName + ' and type ss server to get started!');
+        console.log(chalk.yellow('Running initial build and generating Relay schema...'));
+
+        if (!fs.existsSync('./build')) fs.mkdirSync('./build');
+        if (!fs.existsSync('./build/app')) fs.mkdirSync('./build/app');
+        if (!fs.existsSync('./build/config')) fs.mkdirSync('./build/config');
+        if (!fs.existsSync('./build/server')) fs.mkdirSync('./build/server');
+
+        var builder = spawn('./node_modules/gulp/bin/gulp.js',  ['build'], {cwd: process.cwd() + '/' + appName, stdio: [process.stdin, process.stdout, process.stderr]});
+
+        builder.on('exit', function() {
+          console.info(heredoc`
+            ${chalk.green('All done!')}
+            ${chalk.green('Supersonic is now installed and you are ready to go!')}
+            ${chalk.green('cd ' + appName + ' and type ss server to get started!')}
+          `)
+        });
       });
     });
   });

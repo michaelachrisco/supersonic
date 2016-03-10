@@ -12,31 +12,5 @@ exports.build = function() {
   if (!fs.existsSync('./build/config')) fs.mkdirSync('./build/config');
   if (!fs.existsSync('./build/server')) fs.mkdirSync('./build/server');
 
-  var buildApp = spawn('babel', ['./app', '--out-dir', './build/app']);
-  var buildServer = spawn('babel', ['./server', '--out-dir','./build/server']);
-  var buildConfig = spawn('babel', ['./config', '--out-dir', './build/config']);
-
-  buildApp.stdout.on('data', function(data) {
-    console.log(data.toString())
-  })
-
-  buildApp.stderr.on('data', function(data) {
-    console.log(data.toString())
-  })
-
-  buildServer.stdout.on('data', function(data) {
-    console.log(data.toString())
-  })
-
-  buildServer.stderr.on('data', function(data) {
-    console.log(data.toString())
-  })
-
-  buildConfig.stdout.on('data', function(data) {
-    console.log(data.toString())
-  })
-
-  buildConfig.stderr.on('data', function(data) {
-    console.log(data.toString())
-  })
+  var builder = spawn('./node_modules/gulp/bin/gulp.js',  ['build'], {cwd: process.cwd() + '/', stdio: [process.stdin, process.stdout, process.stderr]});
 }

@@ -4,15 +4,29 @@ require('legit-inflectors');
 var gulp = require('gulp'),
   nodemon = require('gulp-nodemon'),
   watch = require('gulp-watch'),
-  livereload = require('gulp-livereload'),
   babel = require('gulp-babel'),
   graphql = require('gulp-graphql'),
   webpack = require('webpack'),
   WebpackDevServer = require('webpack-dev-server'),
-  gutil = require('gulp-util')
+  gutil = require('gulp-util'),
+  del = require('del'),
+  runSequence = require('run-sequence')
+
+var buildPath = 'build/';
+
+function removeBuild() {
+  return del(buildPath)
+}
+
+function buildApp(callback) {
+  runSequence('clean', ['app', 'config', 'server'], 'schema', callback)
+}
+
+gulp.task('build', buildApp)
+gulp.task('clean', removeBuild)
 
 gulp.task('app', function () {
-  gulp.src(['app/**/*.js', 'app/**/*.jsx']).
+  gulp.src(['app/**/*.js', 'app/**/*.jsx', 'app/mutations/**/*.js']).
     pipe(babel()).
     pipe(gulp.dest('build/app'))
 });
@@ -47,7 +61,6 @@ gulp.task('webpack', function () {
   new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,
     hot: true,
-    inline: true,
     stats: {
       colors: true
     }
@@ -58,27 +71,18 @@ gulp.task('webpack', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch([
-    './build/**/*.js'
-  ], function (event) {
-    return gulp.src(event.path)
-      .pipe(livereload());
-  });
-
   gulp.watch('app/**/*', ['app']);
   gulp.watch('config/**/*', ['config']);
   gulp.watch('server/**/*', ['server']);
   gulp.watch(['build/config/schema.js', 'build/app/models/**'], ['schema']);
 });
 
-gulp.task('serve', ['app', 'config', 'server', 'watch', 'schema', 'webpack'], function () {
+gulp.task('serve', ['watch', 'webpack'], function () {
   nodemon({
     script: 'build/server/server.js',
     ext: 'js jsx',
     ignore: ['node_modules']
   });
-
-  livereload.listen();
 });
 
 /**

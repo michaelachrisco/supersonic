@@ -4,9 +4,7 @@ import Relay from 'react-relay'
 import { render } from 'react-dom'
 import IsomorphicRelay from 'isomorphic-relay'
 import IsomorphicRouter from 'isomorphic-relay-router'
-
-// Browser History
-import createBrowserHistory from 'history/lib/createBrowserHistory'
+import { browserHistory } from 'react-router'
 
 // Routes
 import routes from '../config/routes'
@@ -30,7 +28,7 @@ IsomorphicRelay.injectPreparedData(data)
 render(
   <IsomorphicRouter.Router
     routes={routes}
-    history={createBrowserHistory()}
+    history={browserHistory}
   />,
   document.getElementById('app')
 )
