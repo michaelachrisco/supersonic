@@ -30,6 +30,13 @@ describe('Relation', () => {
       var expected = "id = 1 AND email = 'foo@bar.com'"
       expect(relation.buildWhereExpression(params)).to.eql(expected)
     })
+
+    it('should allow a prebuilt where string', () => {
+      var relation = new Relation(BaseModel)
+      var params = "id ilike '%foo%'"
+      var expected = params
+      expect(relation.buildWhereExpression(params)).to.eql(expected)
+    })
   })
 
   //describe('#find', () => {

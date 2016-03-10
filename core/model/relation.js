@@ -32,23 +32,27 @@ export default class Relation {
   }
 
   buildWhereExpression(params) {
-    let expressions = []
+    if (typeof params === 'string') {
+      return params
+    } else {
+      let expressions = []
 
-    for (let key in params) {
-      if (typeof params[key] === 'string') {
-        expressions.push(`${key} = '${params[key]}'`)
-      } else {
-        expressions.push(`${key} = ${params[key]}`)
+      for (let key in params) {
+        if (typeof params[key] === 'string') {
+          expressions.push(`${key} = '${params[key]}'`)
+        } else {
+          expressions.push(`${key} = ${params[key]}`)
+        }
       }
+
+      let expr = squel.expr().and(expressions[0])
+
+      for (var i = 1; i < expressions.length; i++) {
+        expr = expr.and(expressions[i])
+      }
+
+      return expr.toString()
     }
-
-    let expr = squel.expr().and(expressions[0])
-
-    for (var i = 1; i < expressions.length; i++) {
-      expr = expr.and(expressions[i])
-    }
-
-    return expr.toString()
   }
 
   all() {
