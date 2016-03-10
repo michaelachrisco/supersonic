@@ -4,7 +4,7 @@ var fs = require('fs');
 var ncp = require('ncp');
 var dot = require('dot');
 var chalk = require('chalk');
-var heredoc = require('../core/utils/strings').heredoc
+var heredoc = require('../build/utils/strings').heredoc
 
 exports.build = function(appName) {
   fs.mkdirSync('./' + appName);
